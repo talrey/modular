@@ -1,0 +1,31 @@
+modLoader="javafml" #mandatory
+loaderVersion="[36,)"
+license="All rights reserved"
+#issueTrackerURL="https://github.com/talrey" #optional
+[[mods]] #mandatory
+modId="modular"
+version="${file.jarVersion}"
+displayName="Modular Tools"
+# logoFile="modular.png" #optional
+authors="Talrey"
+description='''
+Modular tools for the industrious crafter.
+
+Assemble a tool and try it out, then disassemble it if it doesn't suit you.
+Make a kit that suits your style.
+'''
+[[dependencies.modular]]
+    modId="forge" #mandatory
+    mandatory=true #mandatory
+    versionRange="[36,)" #mandatory
+    # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
+    ordering="NONE"
+    # Side this dependency is applied on - BOTH, CLIENT or SERVER
+    side="BOTH"
+# Here's another dependency
+[[dependencies.modular]]
+    modId="create"
+    mandatory=false
+    versionRange="[mc1.16.5_v0.3.1c,)"
+    ordering="AFTER"
+    side="BOTH"
