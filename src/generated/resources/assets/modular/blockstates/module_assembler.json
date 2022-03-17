@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "modular:block/module_assembler"
+    }
+  }
+}

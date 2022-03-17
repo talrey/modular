@@ -1,0 +1,12 @@
+{
+  "block.modular.module_assembler": "Modular Tool Bench",
+  "item.modular.core_single": "Single Core",
+  "item.modular.function_blade": "Blade Function",
+  "item.modular.function_shield": "Shield Function",
+  "item.modular.handle_long": "Long Handle",
+  "item.modular.modifier_imbued": "Modifier Imbued",
+  "item.modular.tool_base": "How did you get this?",
+  "item.modular.tool_shield": "Modular Shield",
+  "item.modular.tool_sword": "Modular Sword",
+  "itemGroup.modular": "Modular Tools"
+}

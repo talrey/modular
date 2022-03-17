@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "sns",
+    "n n",
+    "sns"
+  ],
+  "key": {
+    "s": {
+      "tag": "forge:string"
+    },
+    "n": {
+      "tag": "forge:nuggets/iron"
+    }
+  },
+  "result": {
+    "item": "modular:core_single"
+  }
+}
