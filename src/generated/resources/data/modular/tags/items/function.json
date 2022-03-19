@@ -2,6 +2,10 @@
   "replace": false,
   "values": [
     "modular:function_blade",
-    "modular:function_shield"
+    "modular:function_shield",
+    "modular:function_pickaxe",
+    "modular:function_woodaxe",
+    "modular:function_shovel",
+    "modular:function_bow"
   ]
 }

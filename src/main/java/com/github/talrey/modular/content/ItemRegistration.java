@@ -21,9 +21,13 @@ import java.util.HashMap;
 import java.util.function.Supplier;
 
 public class ItemRegistration {
-  public static ItemEntry<ModularTool>   TOOL_GENERIC;
-  public static ItemEntry<ModularSword>  TOOL_SWORD;
-  public static ItemEntry<ModularShield> TOOL_SHIELD;
+  public static ItemEntry<ModularTool>    TOOL_GENERIC;
+  public static ItemEntry<ModularSword>   TOOL_SWORD;
+  public static ItemEntry<ModularShield>  TOOL_SHIELD;
+  public static ItemEntry<ModularPickaxe> TOOL_PICKAXE;
+  public static ItemEntry<ModularWoodaxe> TOOL_WOODAXE;
+  public static ItemEntry<ModularShovel>  TOOL_SHOVEL;
+  public static ItemEntry<ModularBow>     TOOL_BOW;
 
   private static HashMap<ModularToolComponent, IModularTool> allModularTools = new HashMap<>();
   private static ArrayList<ModularToolComponent> allComponents = new ArrayList<>();
@@ -37,6 +41,10 @@ public class ItemRegistration {
   // == FUNCTIONS == //
   public static ItemEntry<ModularToolComponent> FUNCTION_BLADE;
   public static ItemEntry<ModularToolComponent> FUNCTION_SHIELD;
+  public static ItemEntry<ModularToolComponent> FUNCTION_PICKAXE;
+  public static ItemEntry<ModularToolComponent> FUNCTION_WOODAXE;
+  public static ItemEntry<ModularToolComponent> FUNCTION_SHOVEL;
+  public static ItemEntry<ModularToolComponent> FUNCTION_BOW;
 
   // == MODIFIERS == //
   public static ItemEntry<MTCModifierImbued> MODIFIER_IMBUED;
@@ -144,6 +152,26 @@ public class ItemRegistration {
     // .recipe
     .register();
 
+    FUNCTION_PICKAXE = component(reg, "function_pickaxe", "Pickaxe Function", "Pick", ComponentType.FUNCTION)
+    .tag(TAG_FUNCTION)
+    // .recipe
+    .register();
+
+    FUNCTION_WOODAXE = component(reg, "function_woodaxe", "Woodaxe Function", "Axe", ComponentType.FUNCTION)
+    .tag(TAG_FUNCTION)
+    // .recipe
+    .register();
+
+    FUNCTION_SHOVEL = component(reg, "function_shovel", "Shovel Function", "Shovel", ComponentType.FUNCTION)
+    .tag(TAG_FUNCTION)
+    // .recipe
+    .register();
+
+    FUNCTION_BOW = component(reg, "function_bow", "Bow Function", "Bow", ComponentType.FUNCTION)
+    .tag(TAG_FUNCTION)
+    // .recipe
+    .register();
+
     MODIFIER_IMBUED = reg.item("modifier_imbued", p-> new MTCModifierImbued("Imbuing Modifier", p))
     .tag(TAG_MODIFIER)
     .recipe((ctx, prov)-> ShapedRecipeBuilder.shaped(ctx.get())
@@ -188,6 +216,30 @@ public class ItemRegistration {
     .properties(defaultToolProperties)
     .onRegister(ItemRegistration::registerModularTool)
     .lang("Modular Shield")
+    .register();
+
+    TOOL_PICKAXE = reg.item("tool_pickaxe", ModularPickaxe::new)
+    .properties(defaultToolProperties)
+    .onRegister(ItemRegistration::registerModularTool)
+    .lang("Modular Pickaxe")
+    .register();
+
+    TOOL_WOODAXE = reg.item("tool_woodaxe", ModularWoodaxe::new)
+    .properties(defaultToolProperties)
+    .onRegister(ItemRegistration::registerModularTool)
+    .lang("Modular woodaxe")
+    .register();
+
+    TOOL_SHOVEL = reg.item("tool_shovel", ModularShovel::new)
+    .properties(defaultToolProperties)
+    .onRegister(ItemRegistration::registerModularTool)
+    .lang("Modular Shovel")
+    .register();
+
+    TOOL_BOW = reg.item("tool_bow", ModularBow::new)
+    .properties(defaultToolProperties)
+    .onRegister(ItemRegistration::registerModularTool)
+    .lang("Modular Bow")
     .register();
   }
 

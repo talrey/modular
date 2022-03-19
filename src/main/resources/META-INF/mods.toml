@@ -6,7 +6,7 @@ license="All rights reserved"
 modId="modular"
 version="${file.jarVersion}"
 displayName="Modular Tools"
-# logoFile="modular.png" #optional
+logoFile="logo.png"
 authors="Talrey"
 description='''
 Modular tools for the industrious crafter.

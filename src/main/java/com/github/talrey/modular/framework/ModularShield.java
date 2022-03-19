@@ -1,6 +1,5 @@
 package com.github.talrey.modular.framework;
 
-import com.github.talrey.modular.ModularToolsMod;
 import com.github.talrey.modular.content.ItemRegistration;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -16,9 +15,7 @@ public class ModularShield extends ShieldItem implements IModularTool {
   }
 
   @Override
-  public ModularToolComponent getFunctionComponent() {
-    return ItemRegistration.FUNCTION_SHIELD.get();
-  }
+  public ModularToolComponent getFunctionComponent() { return ItemRegistration.FUNCTION_SHIELD.get(); }
 
   @Override
   public ITextComponent getName(ItemStack tool) {

@@ -8,19 +8,17 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
-public class ModularSword extends SwordItem implements IModularTool {
-
-  // default makes it pretty weak
-  public ModularSword (Properties props) {
+public class ModularPickaxe extends PickaxeItem implements IModularTool {
+  public ModularPickaxe (Properties props) {
     this(ItemTier.WOOD, 1, 1f, props);
   }
 
-  public ModularSword (IItemTier itemTier, int baseDamage, float baseAttackSpeed, Properties props) {
+  public ModularPickaxe (IItemTier itemTier, int baseDamage, float baseAttackSpeed, Properties props) {
     super(itemTier, baseDamage, baseAttackSpeed, props);
   }
 
   @Override
-  public ModularToolComponent getFunctionComponent() { return ItemRegistration.FUNCTION_BLADE.get(); }
+  public ModularToolComponent getFunctionComponent() { return ItemRegistration.FUNCTION_PICKAXE.get(); }
 
   @Override
   public ITextComponent getName(ItemStack tool) {
