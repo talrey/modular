@@ -183,6 +183,7 @@ public class ItemRegistration {
       .unlockedBy("has_item", fromItem(Items.BOOK))
       .save(prov)
     )
+    .onRegister(ItemRegistration::registerMTC)
     /*
     .onRegister( mtc -> {
       mtc.subscribe(ActionType.ASSEMBLE, (ctx)-> {

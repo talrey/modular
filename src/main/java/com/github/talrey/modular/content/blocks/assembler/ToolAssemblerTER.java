@@ -17,12 +17,14 @@ import org.lwjgl.system.CallbackI;
 public class ToolAssemblerTER extends TileEntityRenderer<ToolAssemblerTE> {
 
   private static final Vector2f[] OFFSETS = {
-    new Vector2f(0f, 0f),
-    new Vector2f(0.3f, -0.3f),
-    new Vector2f(0f, 0.3f),
-    new Vector2f(-0.3f, 0f),
-    new Vector2f(0.3f, 0f),
-    new Vector2f(0f, -0.3f)
+    new Vector2f(0f, 0f),      // core, center
+    new Vector2f(0.3f, -0.3f), // handle, left down
+    new Vector2f(0f, 0.3f),    // function, center up
+    new Vector2f(-0.3f, 0f),   // function, right center
+    new Vector2f(-0.3f, 0.3f), // function, right up
+    new Vector2f(0.3f, 0f),    // modifier, left center
+    new Vector2f(0f, -0.3f),   // modifier, center down
+    new Vector2f(-0.3f, -0.3f) // modifier, right down
   };
   private static final Vector2f INVALID_OFFSET = new Vector2f(-0.3f, -0.3f);
 

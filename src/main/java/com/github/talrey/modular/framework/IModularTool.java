@@ -42,16 +42,18 @@ public interface IModularTool {
     if ( !(tool.getItem() instanceof IModularTool) || (tool.getTag() == null) || !(tool.getTag().contains(NBT_TAG)) ) return modout; // empty array
 
     CompoundNBT modules = tool.getTag().getCompound(NBT_TAG);
-    int index = 0;
-    modout[index++] = ItemRegistration.getMTC(modules.getInt(NBT_CORE));
-    modout[index++] = ItemRegistration.getMTC(modules.getInt(NBT_HANDLE));
+    int index = 2;
+    modout[0] = ItemRegistration.getMTC(modules.getInt(NBT_CORE));
+    modout[1] = ItemRegistration.getMTC(modules.getInt(NBT_HANDLE));
     int[] functions = modules.getIntArray(NBT_FUNCTIONS);
     for (int function : functions) {
-      modout[index++] = ItemRegistration.getMTC(function);
+      modout[index] = ItemRegistration.getMTC(function);
+      index++;
     }
     int[] modifiers = modules.getIntArray(NBT_MODIFIERS);
     for (int modifier : modifiers) {
-      modout[index++] = ItemRegistration.getMTC(modifier);
+      modout[index] = ItemRegistration.getMTC(modifier);
+      index++;
     }
     return modout;
   }
