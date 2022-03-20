@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -25,7 +26,8 @@ public class ModularTool extends Item implements IModularTool {
 
   @Override
   public ITextComponent getName(ItemStack tool) {
-    return getFormattedName(tool);
+    if (tool.getTag() != null && tool.getTag().contains(NBT_TAG)) return getFormattedName(tool);
+    /*else*/ return super.getName(tool);
   }
 
   @Override

@@ -19,7 +19,8 @@ public class ModularShield extends ShieldItem implements IModularTool {
 
   @Override
   public ITextComponent getName(ItemStack tool) {
-    return getFormattedName(tool);
+    if (tool.getTag() != null && tool.getTag().contains(NBT_TAG)) return getFormattedName(tool);
+    /*else*/ return super.getName(tool);
   }
 
   @Override

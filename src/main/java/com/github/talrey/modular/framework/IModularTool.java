@@ -1,6 +1,5 @@
 package com.github.talrey.modular.framework;
 
-import com.github.talrey.modular.ModularToolsMod;
 import com.github.talrey.modular.content.ItemRegistration;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -8,7 +7,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.fml.common.Mod;
 
 public interface IModularTool {
   String NBT_TAG = "modules";
@@ -137,7 +135,6 @@ public interface IModularTool {
 
   static String getToolName (ItemStack tool) {
     CompoundNBT modules = tool.getOrCreateTag().getCompound(NBT_TAG);
-    if (modules.isEmpty()) return "how did you get this?";
 
     ModularToolComponent handle = ItemRegistration.getMTC(modules.getInt(NBT_HANDLE));
     ModularToolComponent core   = ItemRegistration.getMTC(modules.getInt(NBT_CORE));
