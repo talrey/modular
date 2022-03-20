@@ -1,6 +1,9 @@
 package com.github.talrey.modular.content.blocks.assembler;
 
+import com.github.talrey.modular.ModularToolsMod;
 import com.github.talrey.modular.content.TileEntityRegistration;
+import com.github.talrey.modular.framework.IModularTool;
+import com.github.talrey.modular.framework.ModularTool;
 import com.github.talrey.modular.framework.ModularToolComponent;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -12,6 +15,7 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
@@ -36,6 +40,19 @@ public class ToolAssemblerBlock extends Block {
           tate.insertComponent(handStack.split(1));
           return ActionResultType.SUCCESS;
         }
+      }
+      else if (handItem instanceof IModularTool) {
+        if (tate.isEmpty()) {
+          ModularToolComponent[] parts = IModularTool.getAllComponents(handStack);
+          for (ModularToolComponent mtc : parts) {
+            if (mtc != null) {
+              tate.insertComponent(new ItemStack(mtc));
+            }
+          }
+          player.setItemInHand(hand, ItemStack.EMPTY);
+        }
+        else player.displayClientMessage(new StringTextComponent("Tool assembler is occupied by parts already!"), true);
+        return ActionResultType.SUCCESS;
       }
       else if (handStack.isEmpty()) {
         player.setItemInHand(hand, tate.tryAssembleTool());

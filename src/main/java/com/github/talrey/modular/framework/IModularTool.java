@@ -1,6 +1,7 @@
 package com.github.talrey.modular.framework;
 
 import com.github.talrey.modular.content.ItemRegistration;
+import com.github.talrey.modular.content.blocks.assembler.ToolAssemblerTE;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -34,6 +35,25 @@ public interface IModularTool {
     if (result) return ActionResultType.SUCCESS;
 
     return ActionResultType.PASS; // none of the modules present reacted to this call
+  }
+
+  static ModularToolComponent[] getAllComponents (ItemStack tool) {
+    ModularToolComponent[] modout = new ModularToolComponent[ToolAssemblerTE.INVENTORY_SIZE];
+    if ( !(tool.getItem() instanceof IModularTool) || (tool.getTag() == null) || !(tool.getTag().contains(NBT_TAG)) ) return modout; // empty array
+
+    CompoundNBT modules = tool.getTag().getCompound(NBT_TAG);
+    int index = 0;
+    modout[index++] = ItemRegistration.getMTC(modules.getInt(NBT_CORE));
+    modout[index++] = ItemRegistration.getMTC(modules.getInt(NBT_HANDLE));
+    int[] functions = modules.getIntArray(NBT_FUNCTIONS);
+    for (int function : functions) {
+      modout[index++] = ItemRegistration.getMTC(function);
+    }
+    int[] modifiers = modules.getIntArray(NBT_MODIFIERS);
+    for (int modifier : modifiers) {
+      modout[index++] = ItemRegistration.getMTC(modifier);
+    }
+    return modout;
   }
 
   static ItemStack addModule (ItemStack in, ItemStack partIn) {

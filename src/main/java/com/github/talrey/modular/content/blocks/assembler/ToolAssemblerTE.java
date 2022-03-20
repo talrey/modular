@@ -16,7 +16,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class ToolAssemblerTE extends TileEntity {
 
-  private static final int INVENTORY_SIZE = 6;
+  public static final int INVENTORY_SIZE = 6;
 
   private final ItemStackHandler inv;
 
@@ -41,7 +41,15 @@ public class ToolAssemblerTE extends TileEntity {
       case FUNCTION -> slot = (inv.getStackInSlot(2).isEmpty() ? 2 : inv.getStackInSlot(3).isEmpty() ? 3 : -1);
       case MODIFIER -> slot = (inv.getStackInSlot(4).isEmpty() ? 4 : inv.getStackInSlot(5).isEmpty() ? 5 : -1);
     }
+    ModularToolsMod.LOGGER.debug("Available slot at " + slot);
     return slot;
+  }
+
+  public boolean isEmpty () {
+    for (int slot=0; slot < INVENTORY_SIZE; slot++) {
+      if (!inv.getStackInSlot(slot).isEmpty()) return false;
+    }
+    return true;
   }
 
   protected boolean canInsertComponent (ModularToolComponent mtc) {
@@ -67,11 +75,9 @@ public class ToolAssemblerTE extends TileEntity {
     ItemStack out = ItemStack.EMPTY;
     if (isValidTool()) {
       out = new ItemStack((Item)ItemRegistration.getModularTool(inv.getStackInSlot(2)));
-    //  ModularToolsMod.LOGGER.debug("Creating new tool of type " + out.getItem().getClass().getName());
       for (int slot=0; slot < INVENTORY_SIZE; slot++) {
         ItemStack part = inv.getStackInSlot(slot);
         if (part.isEmpty()) continue;
-      //  ModularToolsMod.LOGGER.debug("Adding component '" + part.getDisplayName() + "' to tool...");
         out = IModularTool.addModule(out, part);
         inv.setStackInSlot(slot, ItemStack.EMPTY);
       }
