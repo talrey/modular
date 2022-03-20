@@ -27,6 +27,7 @@ public class ItemRegistration {
   public static ItemEntry<ModularPickaxe> TOOL_PICKAXE;
   public static ItemEntry<ModularWoodaxe> TOOL_WOODAXE;
   public static ItemEntry<ModularShovel>  TOOL_SHOVEL;
+  public static ItemEntry<ModularHoe>     TOOL_HOE;
   public static ItemEntry<ModularBow>     TOOL_BOW;
 
   private static HashMap<ModularToolComponent, IModularTool> allModularTools = new HashMap<>();
@@ -44,6 +45,7 @@ public class ItemRegistration {
   public static ItemEntry<ModularToolComponent> FUNCTION_PICKAXE;
   public static ItemEntry<ModularToolComponent> FUNCTION_WOODAXE;
   public static ItemEntry<ModularToolComponent> FUNCTION_SHOVEL;
+  public static ItemEntry<ModularToolComponent> FUNCTION_HOE;
   public static ItemEntry<ModularToolComponent> FUNCTION_BOW;
 
   // == MODIFIERS == //
@@ -167,6 +169,11 @@ public class ItemRegistration {
     // .recipe
     .register();
 
+    FUNCTION_HOE = component(reg, "function_hoe", "Hoe Function", "Hoe", ComponentType.FUNCTION)
+    .tag(TAG_FUNCTION)
+    // .recipe
+    .register();
+
     FUNCTION_BOW = component(reg, "function_bow", "Bow Function", "Bow", ComponentType.FUNCTION)
     .tag(TAG_FUNCTION)
     // .recipe
@@ -235,6 +242,12 @@ public class ItemRegistration {
     .properties(defaultToolProperties)
     .onRegister(ItemRegistration::registerModularTool)
     .lang("Modular Shovel")
+    .register();
+
+    TOOL_HOE = reg.item("tool_hoe", ModularHoe::new)
+    .properties(defaultToolProperties)
+    .onRegister(ItemRegistration::registerModularTool)
+    .lang("Modular Hoe")
     .register();
 
     TOOL_BOW = reg.item("tool_bow", ModularBow::new)
