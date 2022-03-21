@@ -5,6 +5,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
@@ -26,6 +27,11 @@ public class ModularHoe extends HoeItem implements IModularTool {
   public ITextComponent getName(ItemStack tool) {
     if (tool.getTag() != null && tool.getTag().contains(NBT_TAG)) return getFormattedName(tool);
     /*else*/ return super.getName(tool);
+  }
+
+  @Override
+  public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> list) {
+    //fillItemCategory(group, list);
   }
 
   @Override

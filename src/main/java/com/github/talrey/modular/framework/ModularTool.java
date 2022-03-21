@@ -10,6 +10,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
@@ -18,10 +19,16 @@ import net.minecraftforge.common.ToolType;
 import javax.annotation.Nullable;
 import java.util.Set;
 
+// the generic version, generally an error fallback but could be useful for extension
 public class ModularTool extends Item implements IModularTool {
 
   public ModularTool (Properties props) {
     super (props);
+  }
+
+  @Override
+  public ModularToolComponent getFunctionComponent() {
+    return null;
   }
 
   @Override
@@ -31,8 +38,8 @@ public class ModularTool extends Item implements IModularTool {
   }
 
   @Override
-  public ModularToolComponent getFunctionComponent() {
-    return null;
+  public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> list) {
+    //fillItemCategory(group, list);
   }
 
   @Override

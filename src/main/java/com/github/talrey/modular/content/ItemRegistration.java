@@ -13,6 +13,7 @@ import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.item.*;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
 
@@ -259,6 +260,7 @@ public class ItemRegistration {
 
   public static class MyItemGroup extends ItemGroup {
     private final Supplier<ItemStack> sup;
+
     public MyItemGroup (final String name, final Supplier<ItemStack> supplier) {
       super(name);
       sup = supplier;
