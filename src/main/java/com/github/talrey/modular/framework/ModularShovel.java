@@ -41,4 +41,9 @@ public class ModularShovel extends ShovelItem implements IModularTool {
     }
     return super.use(world, user, hand);
   }
+
+  @Override
+  public boolean isEnchantable(ItemStack tool) {
+    return false;
+  }
 }

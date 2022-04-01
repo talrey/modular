@@ -5,14 +5,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
-import java.util.HashMap;
-import java.util.function.Function;
-
 public class ModularToolComponent extends Item {
   protected String partName;
   protected String looseName;
   protected ComponentType partType;
-  private HashMap<ActionType, Function<ActionContext, Boolean>> actions = new HashMap<>();
 
   public ModularToolComponent(String name, ComponentType type, Properties props) {
     this(name, name, type, props);
@@ -33,17 +29,16 @@ public class ModularToolComponent extends Item {
   public String getPartName ()    { return partName;  }
   public ComponentType getType () { return partType;  }
 
-  public ModularToolComponent subscribe (ActionType type, Function<ActionContext, Boolean> action) {
-    actions.put(type, action);
-    return this;
-  }
-
-  protected boolean call (ActionContext ctx) {
-    return actions.containsKey(ctx.type) && actions.get(ctx.type).apply(ctx);
-  }
-
   @Override
   public ITextComponent getName(ItemStack stack) {
     return new StringTextComponent(getItemName()).withStyle(super.getName(stack).getStyle());
+  }
+
+  public ItemStack onAssembly (ItemStack tool, ItemStack component) {
+    return tool;
+  }
+
+  public ItemStack onRemoval (ItemStack tool) {
+    return new ItemStack(this);
   }
 }

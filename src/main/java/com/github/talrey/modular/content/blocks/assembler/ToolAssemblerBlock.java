@@ -3,7 +3,6 @@ package com.github.talrey.modular.content.blocks.assembler;
 import com.github.talrey.modular.ModularToolsMod;
 import com.github.talrey.modular.content.TileEntityRegistration;
 import com.github.talrey.modular.framework.IModularTool;
-import com.github.talrey.modular.framework.ModularTool;
 import com.github.talrey.modular.framework.ModularToolComponent;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -33,20 +32,25 @@ public class ToolAssemblerBlock extends Block {
 
     if (te instanceof ToolAssemblerTE) {
       ToolAssemblerTE tate = (ToolAssemblerTE)te;
-      if (handItem instanceof ModularToolComponent) {
+
+      if (player.isShiftKeyDown()) { // sneaking
+        tate.giveOrEjectAll(player);
+      }
+      else if (handItem instanceof ModularToolComponent) {
         ModularToolComponent mtc = (ModularToolComponent)handItem;
 
         if (tate.canInsertComponent(mtc)) {
           tate.insertComponent(handStack.split(1));
           return ActionResultType.SUCCESS;
         }
+        else player.displayClientMessage(new StringTextComponent("Cannot insert more of that type of component"), true);
       }
       else if (handItem instanceof IModularTool) {
         if (tate.isEmpty()) {
           ModularToolComponent[] parts = IModularTool.getAllComponents(handStack);
           for (ModularToolComponent mtc : parts) {
             if (mtc != null) {
-              tate.insertComponent(new ItemStack(mtc));
+              tate.insertComponent(mtc.onRemoval(handStack));
             }
           }
           player.setItemInHand(hand, ItemStack.EMPTY);

@@ -1,5 +1,6 @@
 package com.github.talrey.modular.framework;
 
+import com.github.talrey.modular.ModularToolsMod;
 import com.github.talrey.modular.content.ItemRegistration;
 import com.github.talrey.modular.content.blocks.assembler.ToolAssemblerTE;
 import net.minecraft.item.Item;
@@ -17,25 +18,6 @@ public interface IModularTool {
   String NBT_MODIFIERS = "mt_modifiers";
 
   ModularToolComponent getFunctionComponent ();
-
-  static ActionResultType callAction (ActionContext ctx) {
-    CompoundNBT modules = ctx.toolInUse.getOrCreateTag().getCompound(NBT_TAG);
-    boolean result = false;
-    if (modules.isEmpty()) return ActionResultType.PASS;
-    result |= ItemRegistration.getMTC(modules.getInt(NBT_CORE)).call(ctx)
-           || ItemRegistration.getMTC(modules.getInt(NBT_HANDLE)).call(ctx);
-    int[] mods = modules.getIntArray(NBT_MODIFIERS);
-    for (int slot=0; slot < mods.length; slot++) {
-      result |= ItemRegistration.getMTC(mods[slot]).call(ctx);
-    }
-    int[] funcs = modules.getIntArray(NBT_FUNCTIONS);
-    for (int slot=0; slot < funcs.length; slot++) {
-      result |= ItemRegistration.getMTC(funcs[slot]).call(ctx);
-    }
-    if (result) return ActionResultType.SUCCESS;
-
-    return ActionResultType.PASS; // none of the modules present reacted to this call
-  }
 
   static ModularToolComponent[] getAllComponents (ItemStack tool) {
     ModularToolComponent[] modout = new ModularToolComponent[ToolAssemblerTE.INVENTORY_SIZE];
@@ -92,7 +74,7 @@ public interface IModularTool {
       }
     }
     in.getTag().put(NBT_TAG, modules);
-    return in;
+    return module.onAssembly(in, partIn);
   }
 
   static ItemStack removeModule (ItemStack in, ModularToolComponent module) {
@@ -141,7 +123,7 @@ public interface IModularTool {
   //  ModularToolsMod.LOGGER.debug("Slots to check: " + slots.length);
     for (int slot=0; slot<slots.length; slot++) {
       if (slots[slot] == index) {
-        if ((slot + 1) % slots.length <= 0) {
+        if (slots[(slot + 1) % slots.length] <= 0) {
           index = slots[0];
         }
         else index = slots[slot + 1];

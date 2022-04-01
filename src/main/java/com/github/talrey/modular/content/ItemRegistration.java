@@ -13,7 +13,6 @@ import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.item.*;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
 
@@ -107,8 +106,6 @@ public class ItemRegistration {
   public static void registerItems (Registrate reg) {
     reg.itemGroup(()->ITEM_GROUP, "Modular Tools");
 
-    //reg.itemGroup(()->ITEM_GROUP, "Modular Tools");
-
     HANDLE_LONG = component(reg,"handle_long", "Long Handle", "Long-handled", ComponentType.HANDLE)
     .tag(TAG_HANDLE)
     .recipe((ctx,prov)-> ShapedRecipeBuilder.shaped(ctx.get())
@@ -192,21 +189,6 @@ public class ItemRegistration {
       .save(prov)
     )
     .onRegister(ItemRegistration::registerMTC)
-    /*
-    .onRegister( mtc -> {
-      mtc.subscribe(ActionType.ASSEMBLE, (ctx)-> {
-        ctx.toolInUse.enchant(Enchantments.BINDING_CURSE, 2);
-        return true;
-      });
-      mtc.subscribe(ActionType.DISASSEMBLE, (ctx)-> {
-        ctx.data = MODIFIER_IMBUED.asStack();
-        EnchantmentHelper.getEnchantments(ctx.toolInUse).forEach((enchant, level)-> ((ItemStack)ctx.data).enchant(enchant, level));
-        ctx.toolInUse.removeTagKey("Enchantments");
-        return true;
-      });
-      ItemRegistration.registerMTC(mtc);
-    })
-    */
     .register();
 
     TOOL_GENERIC = reg.item("tool_base", ModularTool::new)

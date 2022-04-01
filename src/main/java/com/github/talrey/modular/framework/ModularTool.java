@@ -6,7 +6,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -75,7 +74,6 @@ public class ModularTool extends Item implements IModularTool {
   public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity user) {
     ModularToolsMod.LOGGER.debug("EVENT: hurtEnemy");
     return false;
-    //return callAction (new ActionContext(stack, ActionType.ATTACK_ENTITY, target)).equals(ActionResultType.SUCCESS);
   }
 
   @Override
