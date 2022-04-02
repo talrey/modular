@@ -1,6 +1,7 @@
 package com.github.talrey.modular.content.blocks.assembler;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -9,7 +10,10 @@ import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.vector.Vector2f;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -29,6 +33,48 @@ public class ToolAssemblerTER extends TileEntityRenderer<ToolAssemblerTE> {
 
   public ToolAssemblerTER(TileEntityRendererDispatcher terDispatcher) {
     super(terDispatcher);
+  }
+
+  // TODO account for block rotation
+  public static int getSlotIndexFromHit (BlockState state, BlockRayTraceResult hit) {
+    if (hit.getDirection() != Direction.UP) return -1;
+    Vector2f norm = normalizeFaceHit (state, hit);
+    if (norm.x < 0.3) {
+      if (norm.y < 0.3) {
+        return 7; // OFFSETS -.3 -.3
+      }
+      else if (norm.y > 0.7) {
+        return 2; // OFFSETS -.3 +.3
+      }
+      else return 3; // OFFSETS -.3 0
+    }
+    else if (norm.x > 0.7) {
+      if (norm.y < 0.3) {
+        return 1; // OFFSETS +.3 -.3
+      }
+      else if (norm.y > 0.3) {
+        return -1; // OFFSETS +.3 +.3 == INVALID OFFSET
+      }
+      else return 5; // OFFSETS +.3 0
+    }
+    else {
+      if (norm.y < 0.3) {
+        return 6; // OFFSETS 0 -.3
+      }
+      else if (norm.y > 0.7) {
+        return 4; // OFFSETS 0 +.3
+      }
+      else return 0; // OFFSETS 0 0
+    }
+  }
+
+  private static Vector2f normalizeFaceHit (BlockState state, BlockRayTraceResult hit) {
+    double x = hit.getLocation().x;
+    double z = hit.getLocation().z;
+    return new Vector2f(
+    (float)(x < 0 ? x - Math.floor(x) : x)%1,
+    (float)(z < 0 ? z - Math.floor(z) : z)%1
+    );
   }
 
   @Override
