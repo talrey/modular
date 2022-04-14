@@ -63,7 +63,7 @@ public class ItemRegistration {
   }
 
   public static IModularTool getModularTool (ItemStack stack) {
-    if (stack.getItem() instanceof ModularToolComponent mtc) return getModularTool(mtc);
+    if (stack.getItem() instanceof ModularToolComponent) return getModularTool((ModularToolComponent)stack.getItem());
     /*else*/ return TOOL_GENERIC.get();
   }
 

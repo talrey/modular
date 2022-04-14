@@ -41,7 +41,8 @@ public interface IModularTool {
   }
 
   static ItemStack addModule (ItemStack in, ItemStack partIn) {
-    if (!(in.getItem() instanceof IModularTool) || partIn.isEmpty() || !(partIn.getItem() instanceof ModularToolComponent module)) return in;
+    if (!(in.getItem() instanceof IModularTool) || partIn.isEmpty() || !(partIn.getItem() instanceof ModularToolComponent)) return in;
+    ModularToolComponent module = (ModularToolComponent)partIn.getItem();
 
     CompoundNBT modules = in.getOrCreateTag().getCompound(NBT_TAG);
     if (modules.isEmpty()) in.getOrCreateTag().put(NBT_TAG, new CompoundNBT());
@@ -50,9 +51,9 @@ public interface IModularTool {
     int index = ItemRegistration.getIndexOfMTC(module);
     switch (module.partType) {
       // TODO what should happen if there's no slot available
-      case CORE     -> modules.putInt(NBT_CORE, index);
-      case HANDLE   -> modules.putInt(NBT_HANDLE, index);
-      case FUNCTION -> {
+      case CORE:     modules.putInt(NBT_CORE, index); break;
+      case HANDLE:   modules.putInt(NBT_HANDLE, index); break;
+      case FUNCTION:
         if (!modules.contains(NBT_FUNCTIONS)) modules.putIntArray(NBT_FUNCTIONS, new int[]{-1,-1,-1});
         int[] funcs = modules.getIntArray(NBT_FUNCTIONS);
         for (int slot=0; slot<funcs.length; slot++) {
@@ -61,8 +62,8 @@ public interface IModularTool {
             break;
           }
         }
-      }
-      case MODIFIER -> {
+        break;
+      case MODIFIER:
         if (!modules.contains(NBT_MODIFIERS)) modules.putIntArray(NBT_MODIFIERS, new int[] {-1,-1,-1});
         int[] mods = modules.getIntArray(NBT_MODIFIERS);
         for (int slot=0; slot<mods.length; slot++) {
@@ -71,7 +72,7 @@ public interface IModularTool {
             break;
           }
         }
-      }
+        break;
     }
     in.getTag().put(NBT_TAG, modules);
     return module.onAssembly(in, partIn);
@@ -82,36 +83,38 @@ public interface IModularTool {
     if (modules.isEmpty()) return in; // nothing to do here govnah
 
     int index = ItemRegistration.getIndexOfMTC(module);
+    int[] slots;
     switch (module.partType) {
-      case CORE     -> modules.remove(NBT_CORE);
-      case HANDLE   -> modules.remove(NBT_HANDLE);
-      case FUNCTION -> {
+      case CORE:     modules.remove(NBT_CORE);
+      case HANDLE:   modules.remove(NBT_HANDLE);
+      case FUNCTION:
         if (!modules.contains(NBT_FUNCTIONS)) break;
-        int[] slots = modules.getIntArray(NBT_FUNCTIONS);
+        slots = modules.getIntArray(NBT_FUNCTIONS);
         for (int slot=0; slot<slots.length; slot++) {
           if (slots[slot] == index) {
             slots[slot] = -1;
             break;
           }
         }
-      }
-      case MODIFIER -> {
+        break;
+      case MODIFIER:
         if (!modules.contains(NBT_MODIFIERS)) break;
-        int[] slots = modules.getIntArray(NBT_MODIFIERS);
+        slots = modules.getIntArray(NBT_MODIFIERS);
         for (int slot=0; slot<slots.length; slot++) {
           if (slots[slot] == index) {
             slots[slot] = -1;
             break;
           }
         }
-      }
+        break;
     }
     in.getTag().put(NBT_TAG, modules);
     return in;
   }
 
   static ItemStack cycleFunctions (ItemStack in) {
-    if (! (in.getItem() instanceof IModularTool tool)) return in;
+    if (! (in.getItem() instanceof IModularTool)) return in;
+    IModularTool tool = (IModularTool)in.getItem();
 
     CompoundNBT modules = in.getOrCreateTag().getCompound(NBT_TAG);
     if (modules.isEmpty()) return in;

@@ -39,10 +39,10 @@ public class ToolAssemblerTE extends TileEntity {
   private int getAvailableSlot (ModularToolComponent mtc) {
     int slot = -1;
     switch (mtc.getType()) {
-      case CORE     -> slot = (inv.getStackInSlot(0).isEmpty() ? 0 : -1);
-      case HANDLE   -> slot = (inv.getStackInSlot(1).isEmpty() ? 1 : -1);
-      case FUNCTION -> slot = (inv.getStackInSlot(2).isEmpty() ? 2 : inv.getStackInSlot(3).isEmpty() ? 3 : inv.getStackInSlot(4).isEmpty() ? 4 : -1);
-      case MODIFIER -> slot = (inv.getStackInSlot(5).isEmpty() ? 5 : inv.getStackInSlot(6).isEmpty() ? 6 : inv.getStackInSlot(7).isEmpty() ? 7 : -1);
+      case CORE:     slot = (inv.getStackInSlot(0).isEmpty() ? 0 : -1);
+      case HANDLE:   slot = (inv.getStackInSlot(1).isEmpty() ? 1 : -1);
+      case FUNCTION: slot = (inv.getStackInSlot(2).isEmpty() ? 2 : inv.getStackInSlot(3).isEmpty() ? 3 : inv.getStackInSlot(4).isEmpty() ? 4 : -1);
+      case MODIFIER: slot = (inv.getStackInSlot(5).isEmpty() ? 5 : inv.getStackInSlot(6).isEmpty() ? 6 : inv.getStackInSlot(7).isEmpty() ? 7 : -1);
     }
     //ModularToolsMod.LOGGER.debug("Available slot at " + slot);
     return slot;
