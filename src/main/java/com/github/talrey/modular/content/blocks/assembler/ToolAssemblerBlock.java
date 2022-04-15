@@ -70,7 +70,7 @@ public class ToolAssemblerBlock extends Block {
             ModularToolComponent mtc = parts[index];
             if (mtc != null) {
               ItemStack component = mtc.onRemoval(handStack);
-              component.setDamageValue(dura[index]);
+              component.setDamageValue( (mtc == ((IModularTool)handItem).getFunctionComponent()) ? handStack.getDamageValue() : dura[index]);
               tate.insertComponent(component);
             }
           }
