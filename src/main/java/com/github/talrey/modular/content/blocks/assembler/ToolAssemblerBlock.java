@@ -2,6 +2,7 @@ package com.github.talrey.modular.content.blocks.assembler;
 
 import com.github.talrey.modular.ModularToolsMod;
 import com.github.talrey.modular.content.TileEntityRegistration;
+import com.github.talrey.modular.framework.ComponentType;
 import com.github.talrey.modular.framework.IModularTool;
 import com.github.talrey.modular.framework.ModularToolComponent;
 import net.minecraft.block.Block;
@@ -9,6 +10,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
@@ -56,9 +58,20 @@ public class ToolAssemblerBlock extends Block {
       else if (handItem instanceof IModularTool) {
         if (tate.isEmpty()) {
           ModularToolComponent[] parts = IModularTool.getAllComponents(handStack);
-          for (ModularToolComponent mtc : parts) {
+          int[] dura = new int[ToolAssemblerTE.INVENTORY_SIZE];
+          if (handStack.getOrCreateTag().contains(IModularTool.NBT_TAG)) {
+            CompoundNBT modules = handStack.getTag().getCompound(IModularTool.NBT_TAG);
+            if (modules.contains(IModularTool.NBT_DAMAGE)) {
+              dura = modules.getIntArray(IModularTool.NBT_DAMAGE);
+            }
+          }
+
+          for (int index=0; index < parts.length; index++) {
+            ModularToolComponent mtc = parts[index];
             if (mtc != null) {
-              tate.insertComponent(mtc.onRemoval(handStack));
+              ItemStack component = mtc.onRemoval(handStack);
+              component.setDamageValue(dura[index]);
+              tate.insertComponent(component);
             }
           }
           player.setItemInHand(hand, ItemStack.EMPTY);

@@ -52,7 +52,7 @@ public class ItemRegistration {
   public static ItemEntry<MTCModifierImbued> MODIFIER_IMBUED;
 
   // == supporting data == //
-  private static final NonNullUnaryOperator<Item.Properties> defaultToolProperties = p -> p.stacksTo(1).setNoRepair();
+  private static final NonNullUnaryOperator<Item.Properties> defaultToolProperties = p -> p.stacksTo(1).setNoRepair().durability(ItemTier.IRON.getUses());
 
   private static final ITag.INamedTag<Item> TAG_HANDLE   = ItemTags.bind( (new ResourceLocation(ModularToolsMod.MODID, "handle")).toString() );
   private static final ITag.INamedTag<Item> TAG_CORE     = ItemTags.bind( (new ResourceLocation(ModularToolsMod.MODID, "core")).toString() );

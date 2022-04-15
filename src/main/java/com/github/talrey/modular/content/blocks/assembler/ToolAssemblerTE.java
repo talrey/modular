@@ -39,10 +39,10 @@ public class ToolAssemblerTE extends TileEntity {
   private int getAvailableSlot (ModularToolComponent mtc) {
     int slot = -1;
     switch (mtc.getType()) {
-      case CORE:     slot = (inv.getStackInSlot(0).isEmpty() ? 0 : -1);
-      case HANDLE:   slot = (inv.getStackInSlot(1).isEmpty() ? 1 : -1);
-      case FUNCTION: slot = (inv.getStackInSlot(2).isEmpty() ? 2 : inv.getStackInSlot(3).isEmpty() ? 3 : inv.getStackInSlot(4).isEmpty() ? 4 : -1);
-      case MODIFIER: slot = (inv.getStackInSlot(5).isEmpty() ? 5 : inv.getStackInSlot(6).isEmpty() ? 6 : inv.getStackInSlot(7).isEmpty() ? 7 : -1);
+      case CORE:     slot = (inv.getStackInSlot(0).isEmpty() ? 0 : -1); break;
+      case HANDLE:   slot = (inv.getStackInSlot(1).isEmpty() ? 1 : -1); break;
+      case FUNCTION: slot = (inv.getStackInSlot(2).isEmpty() ? 2 : inv.getStackInSlot(3).isEmpty() ? 3 : inv.getStackInSlot(4).isEmpty() ? 4 : -1); break;
+      case MODIFIER: slot = (inv.getStackInSlot(5).isEmpty() ? 5 : inv.getStackInSlot(6).isEmpty() ? 6 : inv.getStackInSlot(7).isEmpty() ? 7 : -1); break;
     }
     //ModularToolsMod.LOGGER.debug("Available slot at " + slot);
     return slot;
@@ -87,6 +87,7 @@ public class ToolAssemblerTE extends TileEntity {
     ItemStack out = ItemStack.EMPTY;
     if (isValidTool()) {
       out = new ItemStack((Item)ItemRegistration.getModularTool(inv.getStackInSlot(2)));
+      out.setDamageValue(inv.getStackInSlot(2).getDamageValue());
       for (int slot=0; slot < INVENTORY_SIZE; slot++) {
         ItemStack part = inv.getStackInSlot(slot);
         if (part.isEmpty()) continue;

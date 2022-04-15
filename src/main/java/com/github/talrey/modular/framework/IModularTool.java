@@ -16,6 +16,7 @@ public interface IModularTool {
   String NBT_HANDLE    = "mt_handle";
   String NBT_FUNCTIONS = "mt_functions";
   String NBT_MODIFIERS = "mt_modifiers";
+  String NBT_DAMAGE    = "module_damage";
 
   ModularToolComponent getFunctionComponent ();
 
@@ -46,19 +47,20 @@ public interface IModularTool {
 
     CompoundNBT modules = in.getOrCreateTag().getCompound(NBT_TAG);
     if (modules.isEmpty()) in.getOrCreateTag().put(NBT_TAG, new CompoundNBT());
+    int[] damage = new int[ToolAssemblerTE.INVENTORY_SIZE];
+    if (modules.contains(NBT_DAMAGE)) damage = modules.getIntArray(NBT_DAMAGE);
 
-    // TODO handle durability of modules - intArray?
     int index = ItemRegistration.getIndexOfMTC(module);
     switch (module.partType) {
-      // TODO what should happen if there's no slot available
-      case CORE:     modules.putInt(NBT_CORE, index); break;
-      case HANDLE:   modules.putInt(NBT_HANDLE, index); break;
+      case CORE:     modules.putInt(NBT_CORE, index); damage[0] = partIn.getDamageValue(); break;
+      case HANDLE:   modules.putInt(NBT_HANDLE, index); damage[1] = partIn.getDamageValue(); break;
       case FUNCTION:
         if (!modules.contains(NBT_FUNCTIONS)) modules.putIntArray(NBT_FUNCTIONS, new int[]{-1,-1,-1});
         int[] funcs = modules.getIntArray(NBT_FUNCTIONS);
         for (int slot=0; slot<funcs.length; slot++) {
           if (funcs[slot] < 0) {
             funcs[slot] = index;
+            damage[2+slot] = partIn.getDamageValue();
             break;
           }
         }
@@ -69,11 +71,13 @@ public interface IModularTool {
         for (int slot=0; slot<mods.length; slot++) {
           if (mods[slot] < 0) {
             mods[slot] = index;
+            damage[5+slot] = partIn.getDamageValue();
             break;
           }
         }
         break;
     }
+    modules.putIntArray(NBT_DAMAGE, damage);
     in.getTag().put(NBT_TAG, modules);
     return module.onAssembly(in, partIn);
   }
@@ -122,21 +126,31 @@ public interface IModularTool {
 
     int index = ItemRegistration.getIndexOfMTC(tool.getFunctionComponent());
   //  ModularToolsMod.LOGGER.debug("Converting from tool type " + index + " = " + tool.getFunctionComponent().getPartName());
-    int[] slots = modules.getIntArray(NBT_FUNCTIONS);
+    int[] slots  = modules.getIntArray(NBT_FUNCTIONS);
+    int[] damage = modules.getIntArray(NBT_DAMAGE);
+    int oldDura  = in.getDamageValue();
+    int newDura  = in.getDamageValue();
   //  ModularToolsMod.LOGGER.debug("Slots to check: " + slots.length);
     for (int slot=0; slot<slots.length; slot++) {
       if (slots[slot] == index) {
         if (slots[(slot + 1) % slots.length] <= 0) {
-          index = slots[0];
+          index   = slots[0];
+          newDura = damage[2];
         }
-        else index = slots[slot + 1];
+        else {
+          index   = slots[slot + 1];
+          newDura = damage[2 + slot + 1];
+        }
+        damage[2 + slot] = oldDura;
         break;
       }
     }
   //  ModularToolsMod.LOGGER.debug("Found tool type " + index + " = " + ItemRegistration.getMTC(index));
     ItemStack out = new ItemStack(((Item)ItemRegistration.getModularTool(ItemRegistration.getMTC(index))));
+    out.setDamageValue(newDura);
   //  ModularToolsMod.LOGGER.debug("Resulting in " + out.getItem().getClass().getName());
-    out.setTag(in.getTag());
+    modules.putIntArray(NBT_DAMAGE, damage);
+    out.getOrCreateTag().put(NBT_TAG, modules);
     return out;
   }
 
