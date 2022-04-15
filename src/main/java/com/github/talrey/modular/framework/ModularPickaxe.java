@@ -1,6 +1,7 @@
 package com.github.talrey.modular.framework;
 
 import com.github.talrey.modular.content.ItemRegistration;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.util.ActionResult;
@@ -38,6 +39,12 @@ public class ModularPickaxe extends PickaxeItem implements IModularTool {
       return ActionResult.success(IModularTool.cycleFunctions(user.getItemInHand(hand)));
     }
     return super.use(world, user, hand);
+  }
+
+  @Override
+  public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, java.util.function.Consumer<T> onBroken) {
+    int remaining = IModularTool.tryAbsorbDamage(stack, amount, entity);
+    return super.damageItem(stack, remaining, entity, onBroken);
   }
 
   @Override

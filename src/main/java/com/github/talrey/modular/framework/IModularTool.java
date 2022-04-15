@@ -3,6 +3,7 @@ package com.github.talrey.modular.framework;
 import com.github.talrey.modular.ModularToolsMod;
 import com.github.talrey.modular.content.ItemRegistration;
 import com.github.talrey.modular.content.blocks.assembler.ToolAssemblerTE;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -152,6 +153,17 @@ public interface IModularTool {
     modules.putIntArray(NBT_DAMAGE, damage);
     out.getOrCreateTag().put(NBT_TAG, modules);
     return out;
+  }
+
+  static int tryAbsorbDamage (ItemStack stack, int amount, Entity wielder) {
+    int remaining = amount;
+    ModularToolComponent[] modules = IModularTool.getAllComponents(stack);
+    for (ModularToolComponent mtc : modules) {
+      if (mtc instanceof IDurabilityConverter && ((IDurabilityConverter)mtc).canConsume(stack, amount, wielder)) {
+        remaining = ((IDurabilityConverter)mtc).consume(stack, amount, wielder);
+      }
+    }
+    return remaining;
   }
 
   static String getToolName (ItemStack tool) {

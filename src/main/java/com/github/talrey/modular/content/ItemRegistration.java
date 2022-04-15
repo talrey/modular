@@ -1,6 +1,7 @@
 package com.github.talrey.modular.content;
 
 import com.github.talrey.modular.ModularToolsMod;
+import com.github.talrey.modular.content.items.MTCModifierEverlasting;
 import com.github.talrey.modular.content.items.MTCModifierImbued;
 import com.github.talrey.modular.framework.*;
 import com.tterrag.registrate.Registrate;
@@ -49,7 +50,8 @@ public class ItemRegistration {
   public static ItemEntry<ModularToolComponent> FUNCTION_BOW;
 
   // == MODIFIERS == //
-  public static ItemEntry<MTCModifierImbued> MODIFIER_IMBUED;
+  public static ItemEntry<MTCModifierImbued>      MODIFIER_IMBUED;
+  public static ItemEntry<MTCModifierEverlasting> MODIFIER_EVERLASTING;
 
   // == supporting data == //
   private static final NonNullUnaryOperator<Item.Properties> defaultToolProperties = p -> p.stacksTo(1).setNoRepair().durability(ItemTier.IRON.getUses());
@@ -188,6 +190,11 @@ public class ItemRegistration {
       .unlockedBy("has_item", fromItem(Items.BOOK))
       .save(prov)
     )
+    .onRegister(ItemRegistration::registerMTC)
+    .register();
+
+    MODIFIER_EVERLASTING = reg.item("modifier_everlasting", p-> new MTCModifierEverlasting("Everlasting Modifier", p))
+    .tag(TAG_MODIFIER)
     .onRegister(ItemRegistration::registerMTC)
     .register();
 
