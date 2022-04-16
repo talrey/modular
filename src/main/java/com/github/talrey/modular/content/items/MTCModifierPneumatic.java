@@ -4,9 +4,9 @@ import com.github.talrey.modular.framework.ComponentType;
 import com.github.talrey.modular.framework.IDurabilityConverter;
 import com.github.talrey.modular.framework.ModularToolComponent;
 import com.simibubi.create.content.curiosities.armor.BackTankUtil;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 
 public class MTCModifierPneumatic extends ModularToolComponent implements IDurabilityConverter {
   private static final int USES_PER_TANK = 200; // TODO move to a Config

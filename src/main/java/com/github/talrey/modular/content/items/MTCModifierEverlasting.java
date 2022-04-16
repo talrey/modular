@@ -3,8 +3,8 @@ package com.github.talrey.modular.content.items;
 import com.github.talrey.modular.framework.ComponentType;
 import com.github.talrey.modular.framework.IDurabilityConverter;
 import com.github.talrey.modular.framework.ModularToolComponent;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
 
 public class MTCModifierEverlasting extends ModularToolComponent implements IDurabilityConverter {
   public MTCModifierEverlasting(String name, Properties props) {

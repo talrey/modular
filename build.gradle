@@ -16,12 +16,13 @@ apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
+//apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
 
 version = "mc${minecraft_version}-0.0.1"
 group = 'com.github.talrey.modular'
 archivesBaseName = 'modular'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(8) // change to 17 in 1.18
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
@@ -36,7 +37,7 @@ minecraft {
     //
     // Use non-default mappings at your own risk. they may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'official', version: '1.16.5'
+    mappings channel: 'official', version: '1.18.2'
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
     
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
@@ -149,7 +150,7 @@ dependencies {
     shade registrate
 
     implementation fg.deobf("com.simibubi.create:Create:mc${create_version}")
-    implementation fg.deobf("com.jozufozu.flywheel:Flywheel:${flywheel_version}") // update to Flywheel-Forge with 1.18
+    implementation fg.deobf("com.jozufozu.flywheel:Flywheel-Forge:${flywheel_version}")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

@@ -1,9 +1,9 @@
 package com.github.talrey.modular.framework;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
 public class ModularToolComponent extends Item {
   protected String partName;
@@ -30,8 +30,8 @@ public class ModularToolComponent extends Item {
   public ComponentType getType () { return partType;  }
 
   @Override
-  public ITextComponent getName(ItemStack stack) {
-    return new StringTextComponent(getItemName()).withStyle(super.getName(stack).getStyle());
+  public Component getName(ItemStack stack) {
+    return new TextComponent(getItemName()).withStyle(super.getName(stack).getStyle());
   }
 
   public ItemStack onAssembly (ItemStack tool, ItemStack component) {

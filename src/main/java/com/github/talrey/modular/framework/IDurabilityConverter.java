@@ -1,7 +1,7 @@
 package com.github.talrey.modular.framework;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
 
 public interface IDurabilityConverter {
   /**
@@ -14,7 +14,7 @@ public interface IDurabilityConverter {
   public default boolean canConsume (ItemStack stack, int amount, Entity wielder) { return getCurrentCapacity(stack, wielder) > 0; }
 
   /**
-   * Called after {@link #canConsume(int) canConsume} returns true, when the module blocks a damage event.
+   * Called after {@link #canConsume(ItemStack, int, Entity) canConsume} returns true, when the module blocks a damage event.
    * @param stack the tool being damaged
    * @param amount the incoming damage
    * @param wielder who, if anyone, is holding the tool

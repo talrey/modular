@@ -3,12 +3,12 @@ package com.github.talrey.modular.content.items;
 import com.github.talrey.modular.Config;
 import com.github.talrey.modular.framework.ComponentType;
 import com.github.talrey.modular.framework.ModularToolComponent;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.ItemStack;
 
-import java.util.List;
 import java.util.Map;
+
 
 public class MTCModifierImbued extends ModularToolComponent {
   public MTCModifierImbued (String name, Properties props) {

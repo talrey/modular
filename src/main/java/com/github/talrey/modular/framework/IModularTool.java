@@ -3,13 +3,12 @@ package com.github.talrey.modular.framework;
 import com.github.talrey.modular.ModularToolsMod;
 import com.github.talrey.modular.content.ItemRegistration;
 import com.github.talrey.modular.content.blocks.assembler.ToolAssemblerTE;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
 public interface IModularTool {
   String NBT_TAG = "modules";
@@ -25,7 +24,7 @@ public interface IModularTool {
     ModularToolComponent[] modout = new ModularToolComponent[ToolAssemblerTE.INVENTORY_SIZE];
     if ( !(tool.getItem() instanceof IModularTool) || (tool.getTag() == null) || !(tool.getTag().contains(NBT_TAG)) ) return modout; // empty array
 
-    CompoundNBT modules = tool.getTag().getCompound(NBT_TAG);
+    CompoundTag modules = tool.getTag().getCompound(NBT_TAG);
     int index = 2;
     modout[0] = ItemRegistration.getMTC(modules.getInt(NBT_CORE));
     modout[1] = ItemRegistration.getMTC(modules.getInt(NBT_HANDLE));
@@ -46,8 +45,8 @@ public interface IModularTool {
     if (!(in.getItem() instanceof IModularTool) || partIn.isEmpty() || !(partIn.getItem() instanceof ModularToolComponent)) return in;
     ModularToolComponent module = (ModularToolComponent)partIn.getItem();
 
-    CompoundNBT modules = in.getOrCreateTag().getCompound(NBT_TAG);
-    if (modules.isEmpty()) in.getOrCreateTag().put(NBT_TAG, new CompoundNBT());
+    CompoundTag modules = in.getOrCreateTag().getCompound(NBT_TAG);
+    if (modules.isEmpty()) in.getOrCreateTag().put(NBT_TAG, new CompoundTag());
     int[] damage = new int[ToolAssemblerTE.INVENTORY_SIZE];
     if (modules.contains(NBT_DAMAGE)) damage = modules.getIntArray(NBT_DAMAGE);
 
@@ -84,7 +83,7 @@ public interface IModularTool {
   }
 
   static ItemStack removeModule (ItemStack in, ModularToolComponent module) {
-    CompoundNBT modules = in.getOrCreateTag().getCompound(NBT_TAG);
+    CompoundTag modules = in.getOrCreateTag().getCompound(NBT_TAG);
     if (modules.isEmpty()) return in; // nothing to do here govnah
 
     int index = ItemRegistration.getIndexOfMTC(module);
@@ -121,7 +120,7 @@ public interface IModularTool {
     if (! (in.getItem() instanceof IModularTool)) return in;
     IModularTool tool = (IModularTool)in.getItem();
 
-    CompoundNBT modules = in.getOrCreateTag().getCompound(NBT_TAG);
+    CompoundTag modules = in.getOrCreateTag().getCompound(NBT_TAG);
     if (modules.isEmpty()) return in;
  //   ModularToolsMod.LOGGER.debug("Found functions...");
 
@@ -167,7 +166,7 @@ public interface IModularTool {
   }
 
   static String getToolName (ItemStack tool) {
-    CompoundNBT modules = tool.getOrCreateTag().getCompound(NBT_TAG);
+    CompoundTag modules = tool.getOrCreateTag().getCompound(NBT_TAG);
 
     ModularToolComponent handle = ItemRegistration.getMTC(modules.getInt(NBT_HANDLE));
     ModularToolComponent core   = ItemRegistration.getMTC(modules.getInt(NBT_CORE));
@@ -197,7 +196,7 @@ public interface IModularTool {
     return strb.toString().trim();
   }
 
-  default ITextComponent getFormattedName (ItemStack stack) {
-    return new StringTextComponent(getToolName(stack)).withStyle(stack.getRarity().color);
+  default Component getFormattedName (ItemStack stack) {
+    return new TextComponent(getToolName(stack)).withStyle(stack.getRarity().color);
   }
 }

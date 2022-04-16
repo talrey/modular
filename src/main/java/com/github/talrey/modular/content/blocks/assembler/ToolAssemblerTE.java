@@ -4,27 +4,27 @@ import com.github.talrey.modular.ModularToolsMod;
 import com.github.talrey.modular.content.ItemRegistration;
 import com.github.talrey.modular.framework.IModularTool;
 import com.github.talrey.modular.framework.ModularToolComponent;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import com.mojang.math.Vector3f;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class ToolAssemblerTE extends TileEntity {
+public class ToolAssemblerTE extends BlockEntity {
 
   public static final int INVENTORY_SIZE = 8;
 
   private final ItemStackHandler inv;
   private static final Vector3f EJECT_POS = new Vector3f(0.5f, 1f, 0.5f);
 
-  public ToolAssemblerTE(TileEntityType<?> type) {
-    super(type);
+  public ToolAssemblerTE(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+    super(type, pos, state);
     inv = new ItemStackHandler(INVENTORY_SIZE) {
       @Override
       protected void onContentsChanged (int slot) {
@@ -98,7 +98,7 @@ public class ToolAssemblerTE extends TileEntity {
     return out;
   }
 
-  protected void giveOrEjectAll (PlayerEntity player) {
+  protected void giveOrEjectAll (Player player) {
     for (int slot=0; slot < INVENTORY_SIZE; slot++) {
       if (!giveSlot(player, slot)) {
         ejectAll();
@@ -113,10 +113,10 @@ public class ToolAssemblerTE extends TileEntity {
     }
   }
 
-  protected boolean giveSlot (PlayerEntity player, int slot) {
-    int invSlot = player.inventory.getFreeSlot();
+  protected boolean giveSlot (Player player, int slot) {
+    int invSlot = player.getInventory().getFreeSlot();
     if (invSlot >= 0 && slot >= 0 && slot < INVENTORY_SIZE) {
-      player.inventory.add(inv.getStackInSlot(slot));
+      player.getInventory().add(inv.getStackInSlot(slot));
       inv.setStackInSlot(slot, ItemStack.EMPTY);
       return true;
     }
@@ -134,7 +134,7 @@ public class ToolAssemblerTE extends TileEntity {
   public void inventoryChanged () {
     super.setChanged();
     if (level != null) {
-      level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
+      level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
     }
   }
 
@@ -143,14 +143,14 @@ public class ToolAssemblerTE extends TileEntity {
   }
 
   @Override
-  public void load(BlockState state, CompoundNBT cnbt) {
-    super.load(state, cnbt);
+  public void load (CompoundTag cnbt) {
+    super.load(cnbt);
     inv.deserializeNBT(cnbt.getCompound("inv"));
   }
 
   @Override
-  public CompoundNBT save(CompoundNBT cnbt) {
+  public void saveAdditional (CompoundTag cnbt) {
     cnbt.put("inv", inv.serializeNBT());
-    return super.save(cnbt);
+    super.saveAdditional (cnbt);
   }
 }

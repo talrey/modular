@@ -9,19 +9,26 @@ import com.tterrag.registrate.Registrate;
 import com.tterrag.registrate.builders.ItemBuilder;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
-import net.minecraft.advancements.criterion.InventoryChangeTrigger;
-import net.minecraft.advancements.criterion.ItemPredicate;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.item.*;
-import net.minecraft.tags.ITag;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.fml.ModList;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.function.Supplier;
+
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.Tiers;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class ItemRegistration {
   public static ItemEntry<ModularTool>    TOOL_GENERIC;
@@ -57,14 +64,22 @@ public class ItemRegistration {
   public static ItemEntry<? extends ModularToolComponent> MODIFIER_PNEUMATIC;   // requires Create Mod to function, generates placeholder otherwise.
 
   // == supporting data == //
-  private static final NonNullUnaryOperator<Item.Properties> defaultToolProperties = p -> p.stacksTo(1).setNoRepair().durability(ItemTier.IRON.getUses());
+  private static final NonNullUnaryOperator<Item.Properties> defaultToolProperties = p -> p.stacksTo(1).setNoRepair().durability(Tiers.IRON.getUses());
 
-  private static final ITag.INamedTag<Item> TAG_HANDLE   = ItemTags.bind( (new ResourceLocation(ModularToolsMod.MODID, "handle")).toString() );
-  private static final ITag.INamedTag<Item> TAG_CORE     = ItemTags.bind( (new ResourceLocation(ModularToolsMod.MODID, "core")).toString() );
-  private static final ITag.INamedTag<Item> TAG_FUNCTION = ItemTags.bind( (new ResourceLocation(ModularToolsMod.MODID, "function")).toString() );
-  private static final ITag.INamedTag<Item> TAG_MODIFIER = ItemTags.bind( (new ResourceLocation(ModularToolsMod.MODID, "modifier")).toString() );
+  private static final TagKey<Item> TAG_HANDLE   = makeItemTag(ModularToolsMod.MODID, "handle");
+  private static final TagKey<Item> TAG_CORE     = makeItemTag(ModularToolsMod.MODID, "core");
+  private static final TagKey<Item> TAG_FUNCTION = makeItemTag(ModularToolsMod.MODID, "function");
+  private static final TagKey<Item> TAG_MODIFIER = makeItemTag(ModularToolsMod.MODID, "modifier");
 
   public ItemRegistration () {
+  }
+
+  public static TagKey<Item> makeForgeItemTag (String path) {
+    return makeItemTag("forge", path);
+  }
+
+  public static TagKey<Item> makeItemTag (String mod, String path) {
+    return ForgeRegistries.ITEMS.tags().createOptionalTagKey(new ResourceLocation(mod, path), Collections.emptySet());
   }
 
   public static IModularTool getModularTool (ItemStack stack) {
@@ -100,16 +115,16 @@ public class ItemRegistration {
     .onRegister(ItemRegistration::registerMTC);
   }
 
-  static InventoryChangeTrigger.Instance fromTag (ITag tag) {
-    return InventoryChangeTrigger.Instance.hasItems(ItemPredicate.Builder.item().of(tag).build());
+  static InventoryChangeTrigger.TriggerInstance fromTag (TagKey<Item> tag) {
+    return InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(tag).build());
   }
 
-  static InventoryChangeTrigger.Instance fromItem (Item item) {
-    return InventoryChangeTrigger.Instance.hasItems(item);
+  static InventoryChangeTrigger.TriggerInstance fromItem (Item item) {
+    return InventoryChangeTrigger.TriggerInstance.hasItems(item);
   }
 
   public static void registerItems (Registrate reg) {
-    reg.itemGroup(()->ITEM_GROUP, "Modular Tools");
+    reg.creativeModeTab(()->ITEM_GROUP, "Modular Tools");
 
     HANDLE_LONG = component(reg,"handle_long", "Long Handle", "Long-handled", ComponentType.HANDLE)
     .tag(TAG_HANDLE)
@@ -264,7 +279,7 @@ public class ItemRegistration {
     .register();
   }
 
-  public static class MyItemGroup extends ItemGroup {
+  public static class MyItemGroup extends CreativeModeTab {
     private final Supplier<ItemStack> sup;
 
     public MyItemGroup (final String name, final Supplier<ItemStack> supplier) {
@@ -276,5 +291,5 @@ public class ItemRegistration {
       return sup.get();
     }
   }
-  public static final ItemGroup ITEM_GROUP = new MyItemGroup(ModularToolsMod.MODID, () -> TOOL_GENERIC.asStack());
+  public static final CreativeModeTab ITEM_GROUP = new MyItemGroup(ModularToolsMod.MODID, () -> TOOL_GENERIC.asStack());
 }

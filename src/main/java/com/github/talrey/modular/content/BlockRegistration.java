@@ -3,9 +3,9 @@ package com.github.talrey.modular.content;
 import com.github.talrey.modular.content.blocks.assembler.ToolAssemblerBlock;
 import com.tterrag.registrate.Registrate;
 import com.tterrag.registrate.util.entry.BlockEntry;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.item.Items;
-import net.minecraftforge.common.ToolType;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.item.Items;
 
 public class BlockRegistration {
   public static BlockEntry<ToolAssemblerBlock> MODULE_ASSEMBLER;
@@ -14,10 +14,11 @@ public class BlockRegistration {
   }
 
   public static void registerBlocks (Registrate reg) {
-    reg.itemGroup(()->ItemRegistration.ITEM_GROUP);
+    reg.creativeModeTab(()->ItemRegistration.ITEM_GROUP);
 
     MODULE_ASSEMBLER = reg.block("module_assembler", ToolAssemblerBlock::new)
-    .properties(p-> p.harvestTool(ToolType.AXE).strength(1,4))
+    .properties(p-> p.strength(1,4))
+      .tag(BlockTags.MINEABLE_WITH_AXE)
     .lang("Modular Tool Bench")
     .simpleItem()
     .recipe((ctx,prov)-> ShapedRecipeBuilder.shaped(ctx.get())

@@ -1,44 +1,40 @@
 package com.github.talrey.modular.content.blocks.assembler;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.block.BlockState;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.vector.Vector2f;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec2;
+import com.mojang.math.Vector3f;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class ToolAssemblerTER extends TileEntityRenderer<ToolAssemblerTE> {
+public class ToolAssemblerTER implements BlockEntityRenderer<ToolAssemblerTE> {
 
-  private static final Vector2f[] OFFSETS = {
-    new Vector2f(0f, 0f),      // core, center
-    new Vector2f(0.3f, -0.3f), // handle, left down
-    new Vector2f(-0.3f, 0.3f), // function, right up
-    new Vector2f(-0.3f, 0f),   // function, right center
-    new Vector2f(0f, 0.3f),    // function, center up
-    new Vector2f(0.3f, 0f),    // modifier, left center
-    new Vector2f(0f, -0.3f),   // modifier, center down
-    new Vector2f(-0.3f, -0.3f) // modifier, right down
+  private static final Vec2[] OFFSETS = {
+    new Vec2(0f, 0f),      // core, center
+    new Vec2(0.3f, -0.3f), // handle, left down
+    new Vec2(-0.3f, 0.3f), // function, right up
+    new Vec2(-0.3f, 0f),   // function, right center
+    new Vec2(0f, 0.3f),    // function, center up
+    new Vec2(0.3f, 0f),    // modifier, left center
+    new Vec2(0f, -0.3f),   // modifier, center down
+    new Vec2(-0.3f, -0.3f) // modifier, right down
   };
-  private static final Vector2f INVALID_OFFSET = new Vector2f(0.3f, 0.3f); // left up
+  private static final Vec2 INVALID_OFFSET = new Vec2(0.3f, 0.3f); // left up
 
-  public ToolAssemblerTER(TileEntityRendererDispatcher terDispatcher) {
-    super(terDispatcher);
+  public ToolAssemblerTER() {
   }
 
   // TODO account for block rotation
-  public static int getSlotIndexFromHit (BlockState state, BlockRayTraceResult hit) {
+  public static int getSlotIndexFromHit (BlockState state, BlockHitResult hit) {
     if (hit.getDirection() != Direction.UP) return -1;
-    Vector2f norm = normalizeFaceHit (state, hit);
+    Vec2 norm = normalizeFaceHit (state, hit);
     if (norm.x < 0.3) {
       if (norm.y < 0.3) {
         return 7; // OFFSETS -.3 -.3
@@ -68,17 +64,17 @@ public class ToolAssemblerTER extends TileEntityRenderer<ToolAssemblerTE> {
     }
   }
 
-  private static Vector2f normalizeFaceHit (BlockState state, BlockRayTraceResult hit) {
+  private static Vec2 normalizeFaceHit (BlockState state, BlockHitResult hit) {
     double x = hit.getLocation().x;
     double z = hit.getLocation().z;
-    return new Vector2f(
+    return new Vec2(
     (float)(x < 0 ? x - Math.floor(x) : x)%1,
     (float)(z < 0 ? z - Math.floor(z) : z)%1
     );
   }
 
   @Override
-  public void render(ToolAssemblerTE tate, float partialTicks, MatrixStack matrix, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
+  public void render(ToolAssemblerTE tate, float partialTicks, PoseStack matrix, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
     ItemStackHandler inventory = tate.getInventory();
     Direction facing = Direction.NORTH;
 
@@ -86,7 +82,7 @@ public class ToolAssemblerTER extends TileEntityRenderer<ToolAssemblerTE> {
       ItemStack stack = inventory.getStackInSlot(slot);
       if (!stack.isEmpty()) {
         matrix.pushPose();
-        Vector2f offset = (slot < OFFSETS.length ? OFFSETS[slot] : INVALID_OFFSET);
+        Vec2 offset = (slot < OFFSETS.length ? OFFSETS[slot] : INVALID_OFFSET);
 
         // center above block, rotate flat, align, resize
         matrix.translate(0.5D, 1.02D, 0.5D);
@@ -96,8 +92,10 @@ public class ToolAssemblerTER extends TileEntityRenderer<ToolAssemblerTE> {
         matrix.scale(0.375f, 0.375f, 0.375f);
 
         if (tate.getLevel() != null) {
+          int MYSTERY_NUMBER = 1; // TODO figure out what the heck this is
           Minecraft.getInstance().getItemRenderer().renderStatic(
-            stack, ItemCameraTransforms.TransformType.FIXED, WorldRenderer.getLightColor(tate.getLevel(), tate.getBlockPos().above()), combinedOverlay, matrix, buffer
+            stack, ItemTransforms.TransformType.FIXED, LevelRenderer.getLightColor(tate.getLevel(), tate.getBlockPos().above()),
+            combinedOverlay, matrix, buffer, MYSTERY_NUMBER
           );
         }
 
