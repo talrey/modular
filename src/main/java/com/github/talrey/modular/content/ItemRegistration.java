@@ -1,6 +1,7 @@
 package com.github.talrey.modular.content;
 
 import com.github.talrey.modular.ModularToolsMod;
+import com.github.talrey.modular.content.items.MTCModifierCharged;
 import com.github.talrey.modular.content.items.MTCModifierEverlasting;
 import com.github.talrey.modular.content.items.MTCModifierImbued;
 import com.github.talrey.modular.content.items.MTCModifierPneumatic;
@@ -62,6 +63,7 @@ public class ItemRegistration {
   public static ItemEntry<MTCModifierImbued>              MODIFIER_IMBUED;
   public static ItemEntry<MTCModifierEverlasting>         MODIFIER_EVERLASTING;
   public static ItemEntry<? extends ModularToolComponent> MODIFIER_PNEUMATIC;   // requires Create Mod to function, generates placeholder otherwise.
+  public static ItemEntry<MTCModifierCharged>             MODIFIER_CHARGED;
 
   // == supporting data == //
   private static final NonNullUnaryOperator<Item.Properties> defaultToolProperties = p -> p.stacksTo(1).setNoRepair().durability(Tiers.IRON.getUses());
@@ -124,6 +126,9 @@ public class ItemRegistration {
   }
 
   public static void registerItems (Registrate reg) {
+    boolean createLoaded = ModList.get().isLoaded("create");
+    ModularToolsMod.LOGGER.info("Create was " + (createLoaded ? "not " : "") + "detected, compatibility features will " + (createLoaded ? "not " : "") + " function");
+
     reg.creativeModeTab(()->ITEM_GROUP, "Modular Tools");
 
     HANDLE_LONG = component(reg,"handle_long", "Long Handle", "Long-handled", ComponentType.HANDLE)
@@ -216,19 +221,18 @@ public class ItemRegistration {
     .onRegister(ItemRegistration::registerMTC)
     .register();
 
-    if (ModList.get().isLoaded("create")) {
-      ModularToolsMod.LOGGER.info("Detected Create, Pneumatic Modifier will function.");
-      MODIFIER_PNEUMATIC = reg.item("modifier_pneumatic", p-> new MTCModifierPneumatic("Pneumatic Modifier", p))
-        .tag(TAG_MODIFIER)
-        .onRegister(ItemRegistration::registerMTC)
-        .register();
-    } else {
-      ModularToolsMod.LOGGER.info("Did not detect Create, Pneumatic Modifier will not function.");
-      MODIFIER_PNEUMATIC = reg.item("modifier_pneumatic", p-> new ModularToolComponent("Pneumatic Modifier", "Pneumatic", ComponentType.MODIFIER, p))
-        .tag(TAG_MODIFIER)
-        .onRegister(ItemRegistration::registerMTC)
-        .register();
-    }
+    MODIFIER_PNEUMATIC = reg.item("modifier_pneumatic", p->
+      createLoaded ? new MTCModifierPneumatic("Pneumatic Modifier", p)
+      : new ModularToolComponent("Pneumatic Modifier", "Pneumatic", ComponentType.MODIFIER, p)
+    )
+      .tag(TAG_MODIFIER)
+      .onRegister(ItemRegistration::registerMTC)
+      .register();
+
+    MODIFIER_CHARGED = reg.item("modifier_charged", p-> new MTCModifierCharged("Charged Modifier", p))
+      .tag(TAG_MODIFIER)
+      .onRegister(ItemRegistration::registerMTC)
+      .register();
 
     TOOL_GENERIC = reg.item("tool_base", ModularTool::new)
     .properties(defaultToolProperties.andThen(p->p.rarity(Rarity.EPIC)))

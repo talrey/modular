@@ -16,6 +16,21 @@ public class MTCModifierPneumatic extends ModularToolComponent implements IDurab
   }
 
   @Override
+  public int getLayerBarColor (ItemStack stack) {
+    return BackTankUtil.getBarColor(stack, USES_PER_TANK);
+  }
+
+  @Override
+  public boolean isLayerBarVisible (ItemStack stack, Entity wielder) {
+    return BackTankUtil.isBarVisible(stack, USES_PER_TANK);
+  }
+
+  @Override
+  public int getLayerBarWidth (ItemStack stack, Entity wielder) {
+    return BackTankUtil.getBarWidth(stack, USES_PER_TANK);
+  }
+
+  @Override
   public boolean canConsume(ItemStack stack, int amount, Entity wielder) {
     if (wielder instanceof LivingEntity) {
       ItemStack tank = BackTankUtil.get((LivingEntity)wielder);

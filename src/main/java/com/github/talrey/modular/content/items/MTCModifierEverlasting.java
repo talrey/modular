@@ -11,27 +11,42 @@ public class MTCModifierEverlasting extends ModularToolComponent implements IDur
     super(name, "Everlasting", ComponentType.MODIFIER, props);
   }
 
-  @java.lang.Override
+  @Override
+  public int getLayerBarColor (ItemStack stack) {
+    return 0;
+  }
+
+  @Override
+  public boolean isLayerBarVisible (ItemStack stack, Entity wielder) {
+    return false; // we don't need to show it
+  }
+
+  @Override
+  public int getLayerBarWidth (ItemStack stack, Entity wielder) {
+    return 13; // full gauge, not that it'll be seen
+  }
+
+  @Override
   public boolean canConsume(ItemStack stack, int amount, Entity wielder) {
     return true;
   }
 
-  @java.lang.Override
+  @Override
   public int consume (ItemStack stack, int amount, Entity wielder) {
     return 0; // consume all incoming damage
   }
 
-  @java.lang.Override
+  @Override
   public int getMaxCapacity (ItemStack stack, Entity wielder) {
     return 1;
   }
 
-  @java.lang.Override
+  @Override
   public int getCurrentCapacity (ItemStack stack, Entity wielder) {
     return 1;
   }
 
-  @java.lang.Override
+  @Override
   public int recharge (ItemStack stack, int amount, Entity wielder) {
     return amount; // cannot accept any charge
   }

@@ -58,4 +58,19 @@ public class ModularShovel extends ShovelItem implements IModularTool {
   public boolean isEnchantable(ItemStack tool) {
     return false;
   }
+
+  @Override
+  public boolean isBarVisible (ItemStack stack) {
+    return IModularTool.isBarVisible(stack);
+  }
+
+  @Override
+  public int getBarWidth (ItemStack stack) {
+    return IModularTool.getBarWidth(stack);
+  }
+
+  @Override
+  public int getBarColor (ItemStack stack) {
+    return IModularTool.getBarColor(stack);
+  }
 }

@@ -1,6 +1,8 @@
 package com.github.talrey.modular.framework;
 
 import com.github.talrey.modular.content.ItemRegistration;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.InteractionResultHolder;
@@ -12,6 +14,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ModularBow extends BowItem implements IModularTool {
   public ModularBow(Properties props) {
@@ -43,13 +47,28 @@ public class ModularBow extends BowItem implements IModularTool {
   }
 
   @Override
-  public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, java.util.function.Consumer<T> onBroken) {
+  public <T extends LivingEntity> int damageItem (ItemStack stack, int amount, T entity, java.util.function.Consumer<T> onBroken) {
     int remaining = IModularTool.tryAbsorbDamage(stack, amount, entity);
     return super.damageItem(stack, remaining, entity, onBroken);
   }
 
   @Override
-  public boolean isEnchantable(ItemStack tool) {
+  public boolean isEnchantable (ItemStack tool) {
     return false;
+  }
+
+  @Override
+  public boolean isBarVisible (ItemStack stack) {
+    return IModularTool.isBarVisible(stack);
+  }
+
+  @Override
+  public int getBarWidth (ItemStack stack) {
+    return IModularTool.getBarWidth(stack);
+  }
+
+  @Override
+  public int getBarColor (ItemStack stack) {
+    return IModularTool.getBarColor(stack);
   }
 }

@@ -1,9 +1,35 @@
 package com.github.talrey.modular.framework;
 
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 
 public interface IDurabilityConverter {
+  /**
+   * Determines the color of the durability bar while this modifier is active.
+   * @param stack the tool being rendered
+   * @return the color as an RGB hexadecimal encoded integer
+   */
+  public default int getLayerBarColor (ItemStack stack) {
+    return Mth.hsvToRgb(Math.max(0.0F, 1.0F - (float) stack.getDamageValue() / stack.getMaxDamage()) / 3.0F, 1.0F, 1.0F);
+  }
+
+  /**
+   * Determine whether the over-bar should be shown.
+   * @param stack the tool being rendered
+   * @param wielder who is holding the tool (most likely the localPlayer)
+   * @return true if the bar is visible
+   */
+  public boolean isLayerBarVisible (ItemStack stack, Entity wielder);
+
+  /**
+   * Determines the "fullness" of the durability gauge.
+   * @param stack the tool being rendered
+   * @param wielder who is holding the tool
+   * @return the bar width
+   */
+  public int getLayerBarWidth (ItemStack stack, Entity wielder);
+
   /**
    * Called when a Modular Tool would lose durability from an event.
    * @param stack the tool being damaged
@@ -46,4 +72,14 @@ public interface IDurabilityConverter {
    * @return any leftover capacity the module couldn't accept
    */
   public int recharge (ItemStack stack, int amount, Entity wielder);
+
+  /**
+   * Determines whether a module can be recharged.
+   * @param stack the tool to recharge
+   * @param wielder who, if anyone, is holding the tool
+   * @return true if the tool can accept charge
+   */
+  public default boolean canRecharge (ItemStack stack, Entity wielder) {
+    return (getCurrentCapacity(stack, wielder) < getMaxCapacity(stack, wielder));
+  }
 }

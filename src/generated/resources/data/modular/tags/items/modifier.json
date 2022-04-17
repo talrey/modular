@@ -3,6 +3,7 @@
   "values": [
     "modular:modifier_imbued",
     "modular:modifier_everlasting",
-    "modular:modifier_pneumatic"
+    "modular:modifier_pneumatic",
+    "modular:modifier_charged"
   ]
 }

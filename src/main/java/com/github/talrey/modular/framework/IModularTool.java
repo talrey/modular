@@ -3,12 +3,17 @@ package com.github.talrey.modular.framework;
 import com.github.talrey.modular.ModularToolsMod;
 import com.github.talrey.modular.content.ItemRegistration;
 import com.github.talrey.modular.content.blocks.assembler.ToolAssemblerTE;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public interface IModularTool {
   String NBT_TAG = "modules";
@@ -147,11 +152,23 @@ public interface IModularTool {
     }
   //  ModularToolsMod.LOGGER.debug("Found tool type " + index + " = " + ItemRegistration.getMTC(index));
     ItemStack out = new ItemStack(((Item)ItemRegistration.getModularTool(ItemRegistration.getMTC(index))));
+    out.setTag(in.getTag());
     out.setDamageValue(newDura);
   //  ModularToolsMod.LOGGER.debug("Resulting in " + out.getItem().getClass().getName());
     modules.putIntArray(NBT_DAMAGE, damage);
-    out.getOrCreateTag().put(NBT_TAG, modules);
+    out.getTag().put(NBT_TAG, modules);
     return out;
+  }
+
+  static IDurabilityConverter getDurabilityModule (ItemStack stack, Entity wielder, boolean skipEmpty) {
+    ModularToolComponent[] modules = IModularTool.getAllComponents(stack);
+    for (ModularToolComponent mtc : modules) {
+      if (mtc instanceof IDurabilityConverter) {
+        if ( ((IDurabilityConverter)mtc).getCurrentCapacity(stack, wielder) <= 0 && skipEmpty) continue;
+        return (IDurabilityConverter)mtc;
+      }
+    }
+    return null;
   }
 
   static int tryAbsorbDamage (ItemStack stack, int amount, Entity wielder) {
@@ -163,6 +180,33 @@ public interface IModularTool {
       }
     }
     return remaining;
+  }
+
+  @OnlyIn(Dist.CLIENT)
+  static boolean isBarVisible (ItemStack stack) {
+    LocalPlayer player = Minecraft.getInstance().player;
+    IDurabilityConverter mtc = getDurabilityModule(stack, player, true);
+    if (mtc != null) return mtc.isLayerBarVisible(stack, player);
+    /*else*/
+    return stack.isDamaged();
+  }
+
+  @OnlyIn(Dist.CLIENT)
+  static int getBarWidth (ItemStack stack) {
+    LocalPlayer player = Minecraft.getInstance().player;
+    IDurabilityConverter mtc = getDurabilityModule(stack, player, true);
+    if (mtc != null) return mtc.getLayerBarWidth(stack, player);
+    /*else*/
+    return Math.round(13.0F - (float) stack.getDamageValue() / stack.getMaxDamage() * 13.0F);
+  }
+
+  @OnlyIn(Dist.CLIENT)
+  static int getBarColor (ItemStack stack) {
+    LocalPlayer player = Minecraft.getInstance().player;
+    IDurabilityConverter mtc = getDurabilityModule(stack, player, true);
+    if (mtc != null) return mtc.getLayerBarColor(stack);
+    /*else*/
+    return Mth.hsvToRgb(Math.max(0.0F, 1.0F - (float) stack.getDamageValue() / stack.getMaxDamage()) / 3.0F, 1.0F, 1.0F);
   }
 
   static String getToolName (ItemStack tool) {
