@@ -9,7 +9,7 @@ buildscript {
 }
 
 plugins {
-    id 'com.github.johnrengelman.shadow' version '6.1.0'
+    id 'com.github.johnrengelman.shadow' version '7.1.0'
 }
 
 apply plugin: 'net.minecraftforge.gradle'
@@ -18,7 +18,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 //apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
 
-version = "mc${minecraft_version}-0.0.1"
+version = "${minecraft_version}-0.0.1"
 group = 'com.github.talrey.modular'
 archivesBaseName = 'modular'
 
