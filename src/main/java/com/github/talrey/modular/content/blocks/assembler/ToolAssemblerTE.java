@@ -4,6 +4,9 @@ import com.github.talrey.modular.ModularToolsMod;
 import com.github.talrey.modular.content.ItemRegistration;
 import com.github.talrey.modular.framework.IModularTool;
 import com.github.talrey.modular.framework.ModularToolComponent;
+import com.github.talrey.modular.framework.capability.CapabilityNotPresentException;
+import com.github.talrey.modular.framework.capability.ModularToolCapability;
+import com.github.talrey.modular.framework.network.ModularToolsPacketHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -91,8 +94,9 @@ public class ToolAssemblerTE extends BlockEntity {
       for (int slot=0; slot < INVENTORY_SIZE; slot++) {
         ItemStack part = inv.getStackInSlot(slot);
         if (part.isEmpty()) continue;
-        out = IModularTool.addModule(out, part);
+        out.getCapability(ModularToolCapability.MTS).orElseThrow(CapabilityNotPresentException::new).attachComponent(part);
         inv.setStackInSlot(slot, ItemStack.EMPTY);
+      //  ModularToolsMod.LOGGER.debug("Added component [" + ((ModularToolComponent)part.getItem()).getItemName() + "] on side " + (level.isClientSide ? "client" : "server"));
       }
     }
     return out;

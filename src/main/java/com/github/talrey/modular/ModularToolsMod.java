@@ -3,15 +3,11 @@ package com.github.talrey.modular;
 import com.github.talrey.modular.content.BlockRegistration;
 import com.github.talrey.modular.content.ItemRegistration;
 import com.github.talrey.modular.content.BlockEntityRegistration;
-import com.github.talrey.modular.content.items.MTCModifierCharged;
-import com.github.talrey.modular.framework.IModularTool;
-import com.github.talrey.modular.framework.MTCEnergyStorage;
-import com.github.talrey.modular.framework.ModularToolComponent;
+import com.github.talrey.modular.framework.capability.ModularToolCapability;
+import com.github.talrey.modular.framework.network.ModularToolsPacketHandler;
 import com.tterrag.registrate.Registrate;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -42,16 +38,24 @@ public class ModularToolsMod
     blocks.registerBlocks(registrar);
     tiles = new BlockEntityRegistration();
     tiles.registerTileEntities(registrar);
+
+    ModularToolsPacketHandler.register();
   }
 
   @SubscribeEvent
-  public void AddModularCapabilities (AttachCapabilitiesEvent<ItemStack> event) {
-    if (event.getObject().getItem() instanceof IModularTool) {
-      for (ModularToolComponent mtc : IModularTool.getAllComponents(event.getObject())) {
-        if (mtc instanceof MTCModifierCharged) {
-          event.addCapability(new ResourceLocation(MODID, "energy"), new MTCEnergyStorage(event.getObject()));
-        }
-      }
-    }
+  public void registerCapabilities (RegisterCapabilitiesEvent event) {
+    event.register(ModularToolCapability.class);
   }
+
+//  @SubscribeEvent
+//  public void AddModularCapabilities (AttachCapabilitiesEvent<ItemStack> event) {
+//    if (event.getObject().getItem() instanceof IModularTool) {
+//      for (ItemStack mod :
+//        event.getObject().getCapability(ModularToolCapability.MTS).orElseThrow(CapabilityNotPresentException::new).findComponents(ComponentType.MODIFIER)) {
+//        if (mod.getItem() instanceof MTCModifierCharged) {
+//          event.addCapability(new ResourceLocation(MODID, "energy"), new MTCEnergyStorage(event.getObject()));
+//        }
+//      }
+//    }
+//  }
 }

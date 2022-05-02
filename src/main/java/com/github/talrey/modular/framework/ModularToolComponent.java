@@ -6,9 +6,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 
 public class ModularToolComponent extends Item {
-  protected String partName;
-  protected String looseName;
-  protected ComponentType partType;
+  protected final String partName;
+  protected final String looseName;
+  protected final ComponentType partType;
 
   public ModularToolComponent(String name, ComponentType type, Properties props) {
     this(name, name, type, props);
@@ -23,6 +23,12 @@ public class ModularToolComponent extends Item {
 
   public boolean is (ComponentType ct) {
     return partType == ct;
+  }
+
+  public boolean equals (ModularToolComponent other) {
+    return this.partType == other.partType
+      && this.looseName.equals(other.looseName)
+      && this.partName.equals(other.partName);
   }
 
   public String getItemName ()    { return looseName; }

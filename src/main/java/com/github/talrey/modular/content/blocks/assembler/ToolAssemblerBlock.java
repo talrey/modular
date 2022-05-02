@@ -3,13 +3,16 @@ package com.github.talrey.modular.content.blocks.assembler;
 import com.github.talrey.modular.content.BlockEntityRegistration;
 import com.github.talrey.modular.framework.IModularTool;
 import com.github.talrey.modular.framework.ModularToolComponent;
+import com.github.talrey.modular.framework.capability.CapabilityNotPresentException;
+import com.github.talrey.modular.framework.capability.IModularToolSystem;
+import com.github.talrey.modular.framework.capability.ModularToolCapability;
+import com.github.talrey.modular.framework.network.ModularToolsPacketHandler;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.core.Direction;
@@ -54,27 +57,18 @@ public class ToolAssemblerBlock extends BaseEntityBlock {
       }
       else if (handItem instanceof IModularTool) {
         if (tate.isEmpty()) {
-          ModularToolComponent[] parts = IModularTool.getAllComponents(handStack);
-          int[] dura = new int[ToolAssemblerTE.INVENTORY_SIZE];
-          if (handStack.getOrCreateTag().contains(IModularTool.NBT_TAG)) {
-            CompoundTag modules = handStack.getTag().getCompound(IModularTool.NBT_TAG);
-            if (modules.contains(IModularTool.NBT_DAMAGE)) {
-              dura = modules.getIntArray(IModularTool.NBT_DAMAGE);
+          if (!world.isClientSide) {
+            IModularToolSystem cache = handStack.getCapability(ModularToolCapability.MTS).orElseThrow(CapabilityNotPresentException::new);
+            ModularToolComponent[] parts = cache.getComponents();
+            for (ModularToolComponent mtc : parts) {
+              if (mtc == null) continue;
+              tate.insertComponent(cache.removeComponent(mtc));
             }
-          }
-
-          for (int index=0; index < parts.length; index++) {
-            ModularToolComponent mtc = parts[index];
-            if (mtc != null) {
-              ItemStack component = mtc.onRemoval(handStack);
-              component.setDamageValue( (mtc == ((IModularTool)handItem).getFunctionComponent()) ? handStack.getDamageValue() : dura[index]);
-              tate.insertComponent(component);
-            }
+            ModularToolsPacketHandler.updateToolAssemblerClientside(tate.serializeNBT(), world, pos);
           }
           player.setItemInHand(hand, ItemStack.EMPTY);
+          return InteractionResult.SUCCESS;
         }
-        else player.displayClientMessage(new TextComponent("Tool assembler is occupied by parts already!"), true);
-        return InteractionResult.SUCCESS;
       }
       else if (handStack.isEmpty()) {
         player.setItemInHand(hand, tate.tryAssembleTool());

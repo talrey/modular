@@ -1,6 +1,8 @@
 package com.github.talrey.modular.framework;
 
 import com.github.talrey.modular.content.items.MTCModifierCharged;
+import com.github.talrey.modular.framework.capability.CapabilityNotPresentException;
+import com.github.talrey.modular.framework.capability.ModularToolCapability;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
@@ -31,10 +33,10 @@ public class MTCEnergyStorage implements IEnergyStorage, ICapabilityProvider {
       mtc = (MTCModifierCharged)stack.getItem();
     }
     else if (stack.getItem() instanceof IModularTool) {
-      ModularToolComponent[] parts = IModularTool.getAllComponents(stack);
-      for (ModularToolComponent part : parts) {
-        if (part instanceof MTCModifierCharged) {
-          mtc = (MTCModifierCharged) part;
+      ItemStack[] parts = stack.getCapability(ModularToolCapability.MTS).orElseThrow(CapabilityNotPresentException::new).findComponents(ComponentType.MODIFIER);
+      for (ItemStack part : parts) {
+        if (part.getItem() instanceof MTCModifierCharged) {
+          mtc = (MTCModifierCharged) part.getItem();
           break;
         }
       }

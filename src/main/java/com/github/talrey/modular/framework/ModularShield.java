@@ -1,6 +1,7 @@
 package com.github.talrey.modular.framework;
 
 import com.github.talrey.modular.content.ItemRegistration;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
@@ -12,7 +13,8 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 
-import net.minecraft.world.item.Item.Properties;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import org.jetbrains.annotations.Nullable;
 
 public class ModularShield extends ShieldItem implements IModularTool {
   public ModularShield(Properties props) {
@@ -23,32 +25,37 @@ public class ModularShield extends ShieldItem implements IModularTool {
   public ModularToolComponent getFunctionComponent() { return ItemRegistration.FUNCTION_SHIELD.get(); }
 
   @Override
-  public Component getName(ItemStack tool) {
-    if (tool.getTag() != null && tool.getTag().contains(NBT_TAG)) return getFormattedName(tool);
-    /*else*/ return super.getName(tool);
+  public Component getName (ItemStack tool) {
+    if (tool.getTag() != null && tool.getTag().contains("display")) return super.getName(tool);;
+    /*else*/ return getFormattedName(tool);
   }
 
   @Override
-  public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> list) {
+  public void fillItemCategory (CreativeModeTab group, NonNullList<ItemStack> list) {
     //fillItemCategory(group, list);
   }
 
   @Override
-  public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
+  public InteractionResultHolder<ItemStack> use (Level world, Player user, InteractionHand hand) {
     if (user.isShiftKeyDown()) {
-      return InteractionResultHolder.success(IModularTool.cycleFunctions(user.getItemInHand(hand)));
+      return cycle(user, user.getItemInHand(hand));
     }
     return super.use(world, user, hand);
   }
 
   @Override
-  public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, java.util.function.Consumer<T> onBroken) {
-    int remaining = IModularTool.tryAbsorbDamage(stack, amount, entity);
-    return super.damageItem(stack, remaining, entity, onBroken);
+  public <T extends LivingEntity> int damageItem (ItemStack stack, int amount, T entity, java.util.function.Consumer<T> onBroken) {
+    IModularTool.absorbDamage(stack, amount, entity);
+    return 0;
   }
 
   @Override
-  public boolean isEnchantable(ItemStack tool) {
+  public boolean isDamageable (ItemStack stack) {
+    return false;
+  }
+
+  @Override
+  public boolean isEnchantable (ItemStack tool) {
     return false;
   }
 
@@ -65,5 +72,23 @@ public class ModularShield extends ShieldItem implements IModularTool {
   @Override
   public int getBarColor (ItemStack stack) {
     return IModularTool.getBarColor(stack);
+  }
+
+  @Nullable
+  @Override
+  public ICapabilityProvider initCapabilities (ItemStack stack, @Nullable CompoundTag nbt) {
+    return IModularTool.onInitCapabilities(stack, nbt);
+  }
+
+  @Nullable
+  @Override
+  public CompoundTag getShareTag (ItemStack stack) {
+    return IModularTool.getShareTag(stack);
+  }
+
+  @Override
+  public void readShareTag (ItemStack stack, @Nullable CompoundTag nbt) {
+    super.readShareTag(stack, nbt);
+    IModularTool.readShareTag(stack, nbt);
   }
 }
