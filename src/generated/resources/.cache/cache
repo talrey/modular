@@ -1,10 +1,11 @@
 79bf4adf5a87b5112d3ae4a5dc0a56689b72c1a2 assets/modular/blockstates/module_assembler.json
-6b44c51d6f75cc261c46e5fbe377fa552830d0c6 assets/modular/lang/en_ud.json
-17e6ce3d50c10347b4bac79f579040c660295dcb assets/modular/lang/en_us.json
+156863e048a9a02bc124a1d56c12318422ac148b assets/modular/lang/en_ud.json
+c82afe1553376f74a20dce0bedd0ed180b27fe9a assets/modular/lang/en_us.json
 eeb11c21457e7cfa6255345efe6ce08d7a51d9c0 assets/modular/models/block/module_assembler.json
 d272a8c017be03ed90153cee39e60259c6dbd1a8 assets/modular/models/item/core_single.json
 97508e151b78a7dd3bb7c4c3e16b92df95050bda assets/modular/models/item/function_blade.json
 c300e5d7026f54ffd71fc73d491cbeddc9a77edf assets/modular/models/item/function_bow.json
+869efd4e7e14db94c853c6623b24ec48d8b9ea5a assets/modular/models/item/function_chest.json
 2918567bcbacdedb4452f2f09b58fc695ee0f47c assets/modular/models/item/function_hoe.json
 f5da7e880f388c9cbeb53d48b260367ef9f6ee19 assets/modular/models/item/function_pickaxe.json
 58c4bae5866bcdda7bcf197f5cc2b3930a0b7914 assets/modular/models/item/function_shield.json
@@ -18,6 +19,7 @@ d5478875dc3f8961611ea7c22b8ce52b81deadaa assets/modular/models/item/function_woo
 f79aa0bb7912430b7f45093d8f7f1efbe57e8339 assets/modular/models/item/module_assembler.json
 0dad89f8458f12da2400122da7f88b069421a77c assets/modular/models/item/tool_base.json
 2dd0463932f5f721c9db0ec982c4be03824205c6 assets/modular/models/item/tool_bow.json
+ea0e9a87795fda56091e6cdab0160e6a79fcd5af assets/modular/models/item/tool_chest.json
 6f77e5f3d0665b361caf3922b63dbe044ef883f7 assets/modular/models/item/tool_hoe.json
 3e72afb2983a75c821d20589e45626bde9841906 assets/modular/models/item/tool_pickaxe.json
 2c49109e9cfba7c8ef5d5d2b40474604f946e00f assets/modular/models/item/tool_shield.json
@@ -37,6 +39,6 @@ f3691d74c08d028872532ef3d5e0957aaf3ab446 data/modular/loot_tables/blocks/module_
 edc3d8ccf4ed2eeb70edc4f9bc6181df0683e724 data/modular/recipes/modifier_imbued.json
 4c94e86ab7614c3f6eb5ec814c7980bc90877b91 data/modular/recipes/module_assembler.json
 95a8436f6ab13afc800040ffa7b100c97721e128 data/modular/tags/items/core.json
-62db7b1936a034ee2102e9ca2e0959f2de799a11 data/modular/tags/items/function.json
+fdb59e28d06db12b985cba655ae4cb59bf1d967d data/modular/tags/items/function.json
 1eabb93c5789834dfa8248f5f2b2ec0ef9c4fe20 data/modular/tags/items/handle.json
 123165485728db41921013d24c889893a899517e data/modular/tags/items/modifier.json

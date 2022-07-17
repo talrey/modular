@@ -40,6 +40,7 @@ public class ItemRegistration {
   public static ItemEntry<ModularShovel>  TOOL_SHOVEL;
   public static ItemEntry<ModularHoe>     TOOL_HOE;
   public static ItemEntry<ModularBow>     TOOL_BOW;
+  public static ItemEntry<ModularChest>   TOOL_CHEST;
 
   private static HashMap<ModularToolComponent, IModularTool> allModularTools = new HashMap<>();
   private static ArrayList<ModularToolComponent> allComponents = new ArrayList<>();
@@ -58,6 +59,7 @@ public class ItemRegistration {
   public static ItemEntry<ModularToolComponent> FUNCTION_SHOVEL;
   public static ItemEntry<ModularToolComponent> FUNCTION_HOE;
   public static ItemEntry<ModularToolComponent> FUNCTION_BOW;
+  public static ItemEntry<ModularToolComponent> FUNCTION_CHEST;
 
   // == MODIFIERS == //
   public static ItemEntry<MTCModifierImbued>              MODIFIER_IMBUED;
@@ -202,6 +204,10 @@ public class ItemRegistration {
     // .recipe
     .register();
 
+    FUNCTION_CHEST = component(reg, "function_chest", "Storage Function", "With Storage", ComponentType.FUNCTION)
+    .tag(TAG_FUNCTION)
+    .register();
+
     MODIFIER_IMBUED = reg.item("modifier_imbued", p-> new MTCModifierImbued("Imbuing Modifier", p))
     .tag(TAG_MODIFIER)
     .recipe((ctx, prov)-> ShapedRecipeBuilder.shaped(ctx.get())
@@ -280,6 +286,12 @@ public class ItemRegistration {
     .properties(defaultToolProperties)
     .onRegister(ItemRegistration::registerModularTool)
     .lang("Modular Bow")
+    .register();
+
+    TOOL_CHEST = reg.item("tool_chest", ModularChest::new)
+    .properties(defaultToolProperties)
+    .onRegister(ItemRegistration::registerModularTool)
+    .lang("Modular Storage")
     .register();
   }
 

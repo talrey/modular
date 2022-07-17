@@ -1,5 +1,6 @@
 package com.github.talrey.modular;
 
+import com.github.talrey.modular.api.capability.ItemStorageProvider;
 import com.github.talrey.modular.content.BlockRegistration;
 import com.github.talrey.modular.content.ItemRegistration;
 import com.github.talrey.modular.content.BlockEntityRegistration;
@@ -11,6 +12,7 @@ import com.tterrag.registrate.Registrate;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -53,5 +55,10 @@ public class ModularToolsMod
         }
       }
     }
+  }
+
+  @SubscribeEvent
+  public void RegisterCapabilities (RegisterCapabilitiesEvent event) {
+    event.register(ItemStorageProvider.class);
   }
 }

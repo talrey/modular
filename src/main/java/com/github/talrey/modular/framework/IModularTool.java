@@ -138,7 +138,7 @@ public interface IModularTool {
   //  ModularToolsMod.LOGGER.debug("Slots to check: " + slots.length);
     for (int slot=0; slot<slots.length; slot++) {
       if (slots[slot] == index) {
-        if (slots[(slot + 1) % slots.length] <= 0) {
+        if (slot + 1 >= slots.length || slots[slot + 1] <= 0) {
           index   = slots[0];
           newDura = damage[2];
         }
