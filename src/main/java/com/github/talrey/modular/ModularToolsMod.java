@@ -7,10 +7,15 @@ import com.github.talrey.modular.content.BlockEntityRegistration;
 import com.github.talrey.modular.content.items.MTCModifierCharged;
 import com.github.talrey.modular.framework.IModularTool;
 import com.github.talrey.modular.framework.MTCEnergyStorage;
+import com.github.talrey.modular.framework.ModularScopeOverlay;
 import com.github.talrey.modular.framework.ModularToolComponent;
 import com.tterrag.registrate.Registrate;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.client.event.FOVModifierEvent;
+import net.minecraftforge.client.gui.ForgeIngameGui;
+import net.minecraftforge.client.gui.OverlayRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -44,6 +49,12 @@ public class ModularToolsMod
     blocks.registerBlocks(registrar);
     tiles = new BlockEntityRegistration();
     tiles.registerTileEntities(registrar);
+
+    registerOverlays();
+  }
+
+  private static void registerOverlays () {
+    OverlayRegistry.registerOverlayAbove(ForgeIngameGui.SPYGLASS_ELEMENT, "Modular's Scope", ModularScopeOverlay.GETTER);
   }
 
   @SubscribeEvent
@@ -54,6 +65,14 @@ public class ModularToolsMod
           event.addCapability(new ResourceLocation(MODID, "energy"), new MTCEnergyStorage(event.getObject()));
         }
       }
+    }
+  }
+
+  @SubscribeEvent
+  public void ZoomInEvent (FOVModifierEvent event) {
+    Player player = event.getEntity();
+    if (player.isUsingItem() && IModularTool.hasComponent(player.getUseItem(), ItemRegistration.MODIFIER_SCOPED.get())) {
+      event.setNewfov(0.1f);
     }
   }
 

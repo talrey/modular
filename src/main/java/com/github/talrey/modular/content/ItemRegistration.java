@@ -1,10 +1,7 @@
 package com.github.talrey.modular.content;
 
 import com.github.talrey.modular.ModularToolsMod;
-import com.github.talrey.modular.content.items.MTCModifierCharged;
-import com.github.talrey.modular.content.items.MTCModifierEverlasting;
-import com.github.talrey.modular.content.items.MTCModifierImbued;
-import com.github.talrey.modular.content.items.MTCModifierPneumatic;
+import com.github.talrey.modular.content.items.*;
 import com.github.talrey.modular.framework.*;
 import com.tterrag.registrate.Registrate;
 import com.tterrag.registrate.builders.ItemBuilder;
@@ -66,6 +63,7 @@ public class ItemRegistration {
   public static ItemEntry<MTCModifierEverlasting>         MODIFIER_EVERLASTING;
   public static ItemEntry<? extends ModularToolComponent> MODIFIER_PNEUMATIC;   // requires Create Mod to function, generates placeholder otherwise.
   public static ItemEntry<MTCModifierCharged>             MODIFIER_CHARGED;
+  public static ItemEntry<ModularToolComponent>           MODIFIER_SCOPED;
 
   // == supporting data == //
   private static final NonNullUnaryOperator<Item.Properties> defaultToolProperties = p -> p.stacksTo(1).setNoRepair().durability(Tiers.IRON.getUses());
@@ -236,6 +234,11 @@ public class ItemRegistration {
       .register();
 
     MODIFIER_CHARGED = reg.item("modifier_charged", p-> new MTCModifierCharged("Charged Modifier", p))
+      .tag(TAG_MODIFIER)
+      .onRegister(ItemRegistration::registerMTC)
+      .register();
+
+    MODIFIER_SCOPED = component(reg, "modifier_scoped", "Scope Modifier", "Scoped", ComponentType.MODIFIER)
       .tag(TAG_MODIFIER)
       .onRegister(ItemRegistration::registerMTC)
       .register();

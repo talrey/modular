@@ -1,17 +1,20 @@
 package com.github.talrey.modular.framework;
 
-import com.github.talrey.modular.ModularToolsMod;
 import com.github.talrey.modular.content.ItemRegistration;
 import com.github.talrey.modular.content.blocks.assembler.ToolAssemblerTE;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -44,6 +47,18 @@ public interface IModularTool {
       index++;
     }
     return modout;
+  }
+
+  static boolean hasComponent (ItemStack tool, ModularToolComponent module) {
+    if ( !(tool.getItem() instanceof IModularTool) || (tool.getTag() == null) || !(tool.getTag().contains(NBT_TAG)) ) return false;
+
+    CompoundTag modules = tool.getTag().getCompound(NBT_TAG);
+    int id = ItemRegistration.getIndexOfMTC(module);
+    boolean result = id == modules.getInt(NBT_CORE) || id == modules.getInt(NBT_HANDLE);
+    for (int function : modules.getIntArray(NBT_FUNCTIONS)) result |= id == function;
+    for (int modifier : modules.getIntArray(NBT_MODIFIERS)) result |= id == modifier;
+
+    return result;
   }
 
   static ItemStack addModule (ItemStack in, ItemStack partIn) {
@@ -119,6 +134,20 @@ public interface IModularTool {
     }
     in.getTag().put(NBT_TAG, modules);
     return in;
+  }
+
+  static boolean runExtraActions (ItemStack tool, Level world, LivingEntity user, InteractionHand hand, ExtraAction action) {
+    boolean shouldCancel = false;
+    ModularToolComponent[] modules = getAllComponents(tool);
+    for (ModularToolComponent module : modules) {
+      if (module == null) continue;
+      switch (action) {
+        case SINGLE_USE -> shouldCancel |= module.extraActionOnUse(tool, world, user, hand);
+        case HOLD       -> shouldCancel |= module.extraActionOnHold(tool, world, user, hand);
+        case END_USE    -> shouldCancel |= module.extraActionOnEndUse(tool, world, user, hand);
+      }
+    }
+    return shouldCancel;
   }
 
   static ItemStack cycleFunctions (ItemStack in) {

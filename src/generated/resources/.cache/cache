@@ -1,6 +1,6 @@
 79bf4adf5a87b5112d3ae4a5dc0a56689b72c1a2 assets/modular/blockstates/module_assembler.json
-156863e048a9a02bc124a1d56c12318422ac148b assets/modular/lang/en_ud.json
-c82afe1553376f74a20dce0bedd0ed180b27fe9a assets/modular/lang/en_us.json
+fce34ef39a31a14de5ebcaa032fd46f562c7a997 assets/modular/lang/en_ud.json
+88095d010ed9cc2feee7d1e9af85b38af9dd5c8b assets/modular/lang/en_us.json
 eeb11c21457e7cfa6255345efe6ce08d7a51d9c0 assets/modular/models/block/module_assembler.json
 d272a8c017be03ed90153cee39e60259c6dbd1a8 assets/modular/models/item/core_single.json
 97508e151b78a7dd3bb7c4c3e16b92df95050bda assets/modular/models/item/function_blade.json
@@ -16,6 +16,7 @@ d5478875dc3f8961611ea7c22b8ce52b81deadaa assets/modular/models/item/function_woo
 9ed14d7a979c38035f3200751a54d9f96b1655b3 assets/modular/models/item/modifier_everlasting.json
 5e75897ea34e45a1b93c26f75d132ca88509388c assets/modular/models/item/modifier_imbued.json
 40a3d9a2cee05717c7fa764feaeb7612b527e39a assets/modular/models/item/modifier_pneumatic.json
+2ba90241e95b1b7f02b707d947b5698e8e2a0491 assets/modular/models/item/modifier_scoped.json
 f79aa0bb7912430b7f45093d8f7f1efbe57e8339 assets/modular/models/item/module_assembler.json
 0dad89f8458f12da2400122da7f88b069421a77c assets/modular/models/item/tool_base.json
 2dd0463932f5f721c9db0ec982c4be03824205c6 assets/modular/models/item/tool_bow.json
@@ -41,4 +42,4 @@ edc3d8ccf4ed2eeb70edc4f9bc6181df0683e724 data/modular/recipes/modifier_imbued.js
 95a8436f6ab13afc800040ffa7b100c97721e128 data/modular/tags/items/core.json
 fdb59e28d06db12b985cba655ae4cb59bf1d967d data/modular/tags/items/function.json
 1eabb93c5789834dfa8248f5f2b2ec0ef9c4fe20 data/modular/tags/items/handle.json
-123165485728db41921013d24c889893a899517e data/modular/tags/items/modifier.json
+79b1ca9dc1f0e937c8cfed401d9c82b81327700a data/modular/tags/items/modifier.json

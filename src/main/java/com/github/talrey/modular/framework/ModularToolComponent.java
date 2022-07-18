@@ -1,9 +1,13 @@
 package com.github.talrey.modular.framework;
 
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.level.Level;
 
 public class ModularToolComponent extends Item {
   protected String partName;
@@ -41,4 +45,10 @@ public class ModularToolComponent extends Item {
   public ItemStack onRemoval (ItemStack tool) {
     return new ItemStack(this);
   }
+
+  public boolean extraActionOnUse (ItemStack tool, Level world, LivingEntity user, InteractionHand hand) { return false; }
+
+  public boolean extraActionOnHold (ItemStack tool, Level world, LivingEntity user, InteractionHand hand) { return false; }
+
+  public boolean extraActionOnEndUse (ItemStack tool, Level world, LivingEntity user, InteractionHand hand) { return false; }
 }
