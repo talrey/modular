@@ -41,11 +41,27 @@ public class ModularShovel extends ShovelItem implements IModularTool {
   }
 
   @Override
-  public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
+  public InteractionResultHolder<ItemStack> use (Level world, Player user, InteractionHand hand) {
     if (user.isShiftKeyDown()) {
       return InteractionResultHolder.success(IModularTool.cycleFunctions(user.getItemInHand(hand)));
     }
+    if (IModularTool.runExtraActions(user.getItemInHand(hand), world, user, hand, ExtraAction.SINGLE_USE))
+      return InteractionResultHolder.pass(user.getItemInHand(hand));
     return super.use(world, user, hand);
+  }
+
+  @Override
+  public void onUseTick (Level world, LivingEntity user, ItemStack stack, int p_41431_) {
+    InteractionHand hand = user.getMainHandItem().equals(stack) ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
+    if (IModularTool.runExtraActions(stack, world, user, hand, ExtraAction.HOLD)) return;
+    super.onUseTick(world, user, stack, p_41431_);
+  }
+
+  @Override
+  public void releaseUsing (ItemStack stack, Level world, LivingEntity user, int p_40670_) {
+    InteractionHand hand = user.getMainHandItem().equals(stack) ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
+    if (IModularTool.runExtraActions(stack, world, user, hand, ExtraAction.END_USE)) return;
+    super.releaseUsing(stack, world, user, p_40670_);
   }
 
   @Override

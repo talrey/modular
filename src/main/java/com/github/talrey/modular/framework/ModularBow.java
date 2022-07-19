@@ -45,14 +45,14 @@ public class ModularBow extends BowItem implements IModularTool {
   }
 
   @Override
-  public void onUseTick(Level world, LivingEntity user, ItemStack stack, int p_41431_) {
+  public void onUseTick (Level world, LivingEntity user, ItemStack stack, int p_41431_) {
     InteractionHand hand = user.getMainHandItem().equals(stack) ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
     if (IModularTool.runExtraActions(stack, world, user, hand, ExtraAction.HOLD)) return;
     super.onUseTick(world, user, stack, p_41431_);
   }
 
   @Override
-  public void releaseUsing(ItemStack stack, Level world, LivingEntity user, int p_40670_) {
+  public void releaseUsing (ItemStack stack, Level world, LivingEntity user, int p_40670_) {
     InteractionHand hand = user.getMainHandItem().equals(stack) ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
     if (IModularTool.runExtraActions(stack, world, user, hand, ExtraAction.END_USE)) return;
     super.releaseUsing(stack, world, user, p_40670_);
