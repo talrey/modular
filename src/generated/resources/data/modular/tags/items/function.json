@@ -8,6 +8,7 @@
     "modular:function_shovel",
     "modular:function_hoe",
     "modular:function_bow",
+    "modular:function_crossbow",
     "modular:function_chest"
   ]
 }

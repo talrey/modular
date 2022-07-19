@@ -29,15 +29,16 @@ import net.minecraft.world.item.Tiers;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class ItemRegistration {
-  public static ItemEntry<ModularTool>    TOOL_GENERIC;
-  public static ItemEntry<ModularSword>   TOOL_SWORD;
-  public static ItemEntry<ModularShield>  TOOL_SHIELD;
-  public static ItemEntry<ModularPickaxe> TOOL_PICKAXE;
-  public static ItemEntry<ModularWoodaxe> TOOL_WOODAXE;
-  public static ItemEntry<ModularShovel>  TOOL_SHOVEL;
-  public static ItemEntry<ModularHoe>     TOOL_HOE;
-  public static ItemEntry<ModularBow>     TOOL_BOW;
-  public static ItemEntry<ModularChest>   TOOL_CHEST;
+  public static ItemEntry<ModularTool>     TOOL_GENERIC;
+  public static ItemEntry<ModularSword>    TOOL_SWORD;
+  public static ItemEntry<ModularShield>   TOOL_SHIELD;
+  public static ItemEntry<ModularPickaxe>  TOOL_PICKAXE;
+  public static ItemEntry<ModularWoodaxe>  TOOL_WOODAXE;
+  public static ItemEntry<ModularShovel>   TOOL_SHOVEL;
+  public static ItemEntry<ModularHoe>      TOOL_HOE;
+  public static ItemEntry<ModularBow>      TOOL_BOW;
+  public static ItemEntry<ModularCrossbow> TOOL_CROSSBOW;
+  public static ItemEntry<ModularChest>    TOOL_CHEST;
 
   private static HashMap<ModularToolComponent, IModularTool> allModularTools = new HashMap<>();
   private static ArrayList<ModularToolComponent> allComponents = new ArrayList<>();
@@ -56,6 +57,7 @@ public class ItemRegistration {
   public static ItemEntry<ModularToolComponent> FUNCTION_SHOVEL;
   public static ItemEntry<ModularToolComponent> FUNCTION_HOE;
   public static ItemEntry<ModularToolComponent> FUNCTION_BOW;
+  public static ItemEntry<ModularToolComponent> FUNCTION_CROSSBOW;
   public static ItemEntry<ModularToolComponent> FUNCTION_CHEST;
 
   // == MODIFIERS == //
@@ -202,6 +204,10 @@ public class ItemRegistration {
     // .recipe
     .register();
 
+    FUNCTION_CROSSBOW = component(reg, "function_crossbow", "Crossbow Function", "Crossbow", ComponentType.FUNCTION)
+    .tag(TAG_FUNCTION)
+    .register();
+
     FUNCTION_CHEST = component(reg, "function_chest", "Storage Function", "With Storage", ComponentType.FUNCTION)
     .tag(TAG_FUNCTION)
     .register();
@@ -289,6 +295,12 @@ public class ItemRegistration {
     .properties(defaultToolProperties)
     .onRegister(ItemRegistration::registerModularTool)
     .lang("Modular Bow")
+    .register();
+
+    TOOL_CROSSBOW = reg.item("tool_crossbow", ModularCrossbow::new)
+    .properties(defaultToolProperties)
+    .onRegister(ItemRegistration::registerModularTool)
+    .lang("Modular Crossbow")
     .register();
 
     TOOL_CHEST = reg.item("tool_chest", ModularChest::new)
