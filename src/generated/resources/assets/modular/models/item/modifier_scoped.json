@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "modular:item/modifier_scoped"
+    "layer0": "modular:item/modifier/modifier_scoped"
   }
 }

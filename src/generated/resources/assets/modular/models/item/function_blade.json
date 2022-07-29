@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "modular:item/function_blade"
+    "layer0": "modular:item/function/function_blade"
   }
 }

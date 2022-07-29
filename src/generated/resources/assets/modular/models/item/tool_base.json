@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "modular:item/tool_base"
+    "layer0": "modular:item/tool/tool_base"
   }
 }

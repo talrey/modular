@@ -114,6 +114,7 @@ public class ItemRegistration {
 
   private static ItemBuilder<ModularToolComponent, ?> component (Registrate reg, String id, String itemName, String partName, ComponentType type) {
     return reg.item(id, p-> new ModularToolComponent(itemName, partName, type, p))
+    .model((ctx,prov)-> prov.generated(ctx, prov.modLoc("item/" + id.split("_")[0] + "/" + id)))
     .properties(defaultToolProperties)
     .lang(itemName)
     .onRegister(ItemRegistration::registerMTC);
@@ -214,6 +215,7 @@ public class ItemRegistration {
 
     MODIFIER_IMBUED = reg.item("modifier_imbued", p-> new MTCModifierImbued("Imbuing Modifier", p))
     .tag(TAG_MODIFIER)
+    .model((ctx,prov)-> prov.generated(ctx, prov.modLoc("item/modifier/modifier_imbued")))
     .recipe((ctx, prov)-> ShapedRecipeBuilder.shaped(ctx.get())
       .pattern("g g")
       .pattern(" b ")
@@ -228,6 +230,7 @@ public class ItemRegistration {
 
     MODIFIER_EVERLASTING = reg.item("modifier_everlasting", p-> new MTCModifierEverlasting("Everlasting Modifier", p))
     .tag(TAG_MODIFIER)
+      .model((ctx,prov)-> prov.generated(ctx, prov.modLoc("item/modifier/modifier_everlasting")))
     .onRegister(ItemRegistration::registerMTC)
     .register();
 
@@ -236,75 +239,88 @@ public class ItemRegistration {
       : new ModularToolComponent("Pneumatic Modifier", "Pneumatic", ComponentType.MODIFIER, p)
     )
       .tag(TAG_MODIFIER)
+      .model((ctx,prov)-> prov.generated(ctx, prov.modLoc("item/modifier/modifier_pneumatic")))
       .onRegister(ItemRegistration::registerMTC)
       .register();
 
     MODIFIER_CHARGED = reg.item("modifier_charged", p-> new MTCModifierCharged("Charged Modifier", p))
       .tag(TAG_MODIFIER)
+      .model((ctx,prov)-> prov.generated(ctx, prov.modLoc("item/modifier/modifier_charged")))
       .onRegister(ItemRegistration::registerMTC)
       .register();
 
     MODIFIER_SCOPED = component(reg, "modifier_scoped", "Scope Modifier", "Scoped", ComponentType.MODIFIER)
       .tag(TAG_MODIFIER)
+      .model((ctx,prov)-> prov.generated(ctx, prov.modLoc("item/modifier/modifier_scoped")))
       .onRegister(ItemRegistration::registerMTC)
       .register();
 
     TOOL_GENERIC = reg.item("tool_base", ModularTool::new)
     .properties(defaultToolProperties.andThen(p->p.rarity(Rarity.EPIC)))
+    .model((ctx,prov)-> prov.generated(ctx, prov.modLoc("item/tool/tool_base")))
     .onRegister(ItemRegistration::registerModularTool)
     .lang("How did you get this?")
     .register();
 
     TOOL_SWORD = reg.item("tool_sword", ModularSword::new)
     .properties(defaultToolProperties)
+    .model((ctx,prov)-> prov.generated(ctx, prov.modLoc("item/tool/tool_sword")))
     .onRegister(ItemRegistration::registerModularTool)
     .lang("Modular Sword")
     .register();
 
     TOOL_SHIELD = reg.item("tool_shield", ModularShield::new)
     .properties(defaultToolProperties)
+    .model((ctx,prov)-> prov.generated(ctx, prov.modLoc("item/tool/tool_shield")))
     .onRegister(ItemRegistration::registerModularTool)
     .lang("Modular Shield")
     .register();
 
     TOOL_PICKAXE = reg.item("tool_pickaxe", ModularPickaxe::new)
     .properties(defaultToolProperties)
+    .model((ctx,prov)-> prov.generated(ctx, prov.modLoc("item/tool/tool_pickaxe")))
     .onRegister(ItemRegistration::registerModularTool)
     .lang("Modular Pickaxe")
     .register();
 
     TOOL_WOODAXE = reg.item("tool_woodaxe", ModularWoodaxe::new)
     .properties(defaultToolProperties)
+    .model((ctx,prov)-> prov.generated(ctx, prov.modLoc("item/tool/tool_woodaxe")))
     .onRegister(ItemRegistration::registerModularTool)
     .lang("Modular woodaxe")
     .register();
 
     TOOL_SHOVEL = reg.item("tool_shovel", ModularShovel::new)
     .properties(defaultToolProperties)
+    .model((ctx,prov)-> prov.generated(ctx, prov.modLoc("item/tool/tool_shovel")))
     .onRegister(ItemRegistration::registerModularTool)
     .lang("Modular Shovel")
     .register();
 
     TOOL_HOE = reg.item("tool_hoe", ModularHoe::new)
     .properties(defaultToolProperties)
+    .model((ctx,prov)-> prov.generated(ctx, prov.modLoc("item/tool/tool_hoe")))
     .onRegister(ItemRegistration::registerModularTool)
     .lang("Modular Hoe")
     .register();
 
     TOOL_BOW = reg.item("tool_bow", ModularBow::new)
     .properties(defaultToolProperties)
+    .model((ctx,prov)-> prov.generated(ctx, prov.modLoc("item/tool/tool_bow")))
     .onRegister(ItemRegistration::registerModularTool)
     .lang("Modular Bow")
     .register();
 
     TOOL_CROSSBOW = reg.item("tool_crossbow", ModularCrossbow::new)
     .properties(defaultToolProperties)
+    .model((ctx,prov)-> prov.generated(ctx, prov.modLoc("item/tool/tool_crossbow")))
     .onRegister(ItemRegistration::registerModularTool)
     .lang("Modular Crossbow")
     .register();
 
     TOOL_CHEST = reg.item("tool_chest", ModularChest::new)
     .properties(defaultToolProperties)
+    .model((ctx,prov)-> prov.generated(ctx, prov.modLoc("item/tool/tool_chest")))
     .onRegister(ItemRegistration::registerModularTool)
     .lang("Modular Storage")
     .register();

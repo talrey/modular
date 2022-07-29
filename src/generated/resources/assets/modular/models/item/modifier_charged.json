@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "modular:item/modifier_charged"
+    "layer0": "modular:item/modifier/modifier_charged"
   }
 }
