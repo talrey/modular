@@ -1,7 +1,8 @@
 79bf4adf5a87b5112d3ae4a5dc0a56689b72c1a2 assets/modular/blockstates/module_assembler.json
-901d45f5fcf2c502e31cb99fbff5e332404ddf6b assets/modular/lang/en_ud.json
-5fc4e24de39c62c8f4b6c0573ac5fd1917899d44 assets/modular/lang/en_us.json
+9a762164d5d6ae393be6f14543a036969fde3f14 assets/modular/lang/en_ud.json
+052bbcbcc1ed9147a7a9ce79aa71ecd8585efd2c assets/modular/lang/en_us.json
 eeb11c21457e7cfa6255345efe6ce08d7a51d9c0 assets/modular/models/block/module_assembler.json
+db67e50c49c15f8aa03b441b08e0a78bc754a854 assets/modular/models/item/captest.json
 76cc0f93b95015da9999d52813cae93e7a32a58e assets/modular/models/item/core_single.json
 dcb5bb74889b41615137b26f72dd94f165d643ed assets/modular/models/item/function_blade.json
 49608f9b0c88a638c792461658e99cb181b2d79d assets/modular/models/item/function_bow.json

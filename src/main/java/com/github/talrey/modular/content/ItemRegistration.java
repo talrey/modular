@@ -1,6 +1,7 @@
 package com.github.talrey.modular.content;
 
 import com.github.talrey.modular.ModularToolsMod;
+import com.github.talrey.modular.api.ToolFactory;
 import com.github.talrey.modular.content.items.*;
 import com.github.talrey.modular.framework.*;
 import com.tterrag.registrate.Registrate;
@@ -12,6 +13,7 @@ import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.*;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.fml.ModList;
 
@@ -20,12 +22,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.function.Supplier;
 
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.Tiers;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class ItemRegistration {
@@ -323,6 +319,11 @@ public class ItemRegistration {
     .model((ctx,prov)-> prov.generated(ctx, prov.modLoc("item/tool/tool_chest")))
     .onRegister(ItemRegistration::registerModularTool)
     .lang("Modular Storage")
+    .register();
+
+    ItemEntry<Item> cap = reg.item("captest", ToolFactory.makeTool("captest", BowItem.class))
+    .model((ctx,prov)-> prov.generated(ctx, prov.modLoc("item/tool/tool_chest")))
+    .onRegister(ToolFactory::register)
     .register();
   }
 
